@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX/UI Hardcore Audit — Модуль 1: Исследования & Дизайн-мышление</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="py-5 px-4 bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-indigo-400">UX/UI Hardcore Audit (110Q System)</h1>
+                <p class="text-xs text-slate-400">Трек 1 из 5: Дизайн-мышление, UX-исследования, CJM и Метрики</p>
+            </div>
+            <span id="progress-indicator" class="text-sm bg-slate-800 border border-slate-700 px-3.5 py-1.5 rounded-full text-slate-300 font-medium">Вопрос 1 из 20</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
+            <div class="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-400 rounded-full mb-5">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">Хардкорный аудит знания UX/UI</h2>
+            <p class="text-slate-400 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                Это **первый модуль** комплексного тестирования на 110+ вопросов. Здесь проверяются глубокие хард-скиллы по исследовательской фазе: формулирование гипотез, проведение кастдевов, метрики (SUS, CES, NPS), проектирование CJM и интерпретация противоречивых результатов юзабилити-тестов.
+            </p>
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 mb-6 text-left max-w-md mx-auto text-xs text-slate-300 space-y-1.5">
+                <p>✓ Есть вариант <span class="text-indigo-400 font-semibold">«Не знаю»</span> для точной фиксации слепых зон.</p>
+                <p>✓ Подробная аргументация на каждом вопросе.</p>
+                <p>✓ Финальный детальный отчет по компетенциям.</p>
+            </div>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-base">
+                Начать Трек 1 (20 вопросов)
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            
+            <div class="mb-3">
+                <span id="category-badge" class="text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"></span>
+            </div>
+
+            <h3 id="question-text" class="text-lg sm:text-xl font-semibold mb-5 text-slate-100 leading-snug"></h3>
+
+            <div id="options-container" class="space-y-3 mb-6"></div>
+
+            <div id="explanation-box" class="hidden p-4 rounded-xl mb-6 text-sm border">
+                <p id="explanation-text" class="font-medium leading-relaxed"></p>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl transition duration-200 cursor-pointer">
+                    Следующий вопрос
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="result-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-500/10 text-indigo-400 rounded-full mb-4 text-3xl font-extrabold border border-indigo-500/20" id="score-circle">
+                    0/20
+                </div>
+                <h2 id="result-title" class="text-2xl font-bold mb-2">Анализ Модуля 1 завершен</h2>
+                <p id="result-description" class="text-slate-400 max-w-lg mx-auto text-sm"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-6 mb-8">
+                <h3 class="text-base font-semibold mb-4 text-slate-200">Детализация пробелов и промахов по исследовательской базе:</h3>
+                <div id="gaps-container" class="space-y-3"></div>
+            </div>
+
+            <div class="text-center flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-6 py-3 rounded-xl transition duration-200 border border-slate-700 cursor-pointer">
+                    Пройти трек заново
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-900">
+        UX/UI Hardcore Audit System — Module 1 of 5
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                category: "Дизайн-мышление",
+                question: "На каком этапе классической 5-этапной модели дизайн-мышления (Stanford d.school) дизайнеры формируют емкое определение проблемы — Problem Statement (POV — Point of View)?",
+                options: [
+                    { text: "На этапе «Эмпатия» (Empathize), когда собирают первые фидбеки пользователей.", isCorrect: false, rationale: "На этапе эмпатии информация только собирается без обобщения." },
+                    { text: "На этапе «Фокусировка / Определение» (Define), когда вся собранная информация синтезируется в четкую формулировку проблемы пользователя.", isCorrect: true, rationale: "Именно на этапе Define синтезируются данные исследований для формулирования точной POV-гипотезы." },
+                    { text: "На этапе «Генерация идей» (Ideate) во время брейншторма.", isCorrect: false, rationale: "На этапе Ideate генерируются решения, а не формулируется проблема." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понимании методологии и этапов Design Thinking." }
+                ]
+            },
+            {
+                category: "UX-исследования",
+                question: "В чем критическое отличие между методами Card Sorting (Карточная сортировка) и Tree Testing (Древовидное тестирование)?",
+                options: [
+                    { text: "Card Sorting используется для дизайна мобильных приложений, а Tree Testing — только для сайтов.", isCorrect: false, rationale: "Оба метода платформонезависимы." },
+                    { text: "Card Sorting — это генеративный метод для создания информационной архитектуры (bottom-up), а Tree Testing — оценочный метод для проверки уже созданной структуры (top-down).", isCorrect: true, rationale: "Сортировка карточек помогает *построить* структуру с нуля на основе ментальных моделей, а тестирование дерева — *проверить*, могут ли пользователи найти нужный раздел в готовой структуре." },
+                    { text: "В Card Sorting участвуют только дизайнеры, а в Tree Testing — реальные пользователи.", isCorrect: false, rationale: "В обоих исследованиях принимают участие исключительно респонденты из целевой аудитории." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в методологиях исследования информационной архитектуры." }
+                ]
+            },
+            {
+                category: "Метрики UX",
+                question: "Что измеряет стандартная опросная система System Usability Scale (SUS) и из скольких вопросов она состоит?",
+                options: [
+                    { text: "Измеряет лояльность бренду, состоит из 1 вопроса с 10-балльной шкалой.", isCorrect: false, rationale: "Это описан метрический опрос NPS (Net Promoter Score)." },
+                    { text: "Измеряет субъективную воспринимаемую простоту использования системы; состоит из 10 вопросов со шкалой Лайкерта от 1 до 5.", isCorrect: true, rationale: "SUS — классический психометрический инструмент из 10 вопросов для расчета итогового балла юзабилити от 0 до 100." },
+                    { text: "Измеряет время выполнения сценария в секундах; состоит из 5 лабораторных задач.", isCorrect: false, rationale: "SUS не измеряет объективные секунды, это субъективный опрос." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в количественных метриках и оценке субъективного удобства." }
+                ]
+            },
+            {
+                category: "Качественные исследования",
+                question: "При проведении глубинного интервью респондент говорит: «Я всегда покупаю товары только по акции и проверяю цены во всех магазинах». Какая фатальная ошибка исследователя может исказить данные?",
+                options: [
+                    { text: "Не спросить респондента его знак зодиака.", isCorrect: false, rationale: "Не имеет отношения к UX." },
+                    { text: "Поверить респонденту на слово и не попросить вспомнить конкретный случай из прошлого (поведенческий факт): «Расскажите, когда вы последний раз покупали со скидкой и как именно выбирали?».", isCorrect: true, rationale: "Люди склонны идеализировать свое поведение. UX-исследователь обязан опираться на прошлый фактический опыт (поведенческие вопросы), а не на декларативные заявления." },
+                    { text: "Перебить респондента и сказать, что скидки — это невыгодно.", isCorrect: false, rationale: "Это нарушение этики, но фатальной методологической ошибкой является именно доверие к декларативному мнению без проверки фактов." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в методике проведения Customer Development и глубинных интервью." }
+                ]
+            },
+            {
+                category: "CJM (Customer Journey Map)",
+                question: "Чем принципиально отличается Customer Journey Map (CJM) от Service Blueprint?",
+                options: [
+                    { text: "CJM рисуется в Figma, а Service Blueprint — только в Miro.", isCorrect: false, rationale: "Инструмент визуализации не имеет значения." },
+                    { text: "CJM фокусируется на внешнем опыте пользователя (мысли, чувства, точки контакта), а Service Blueprint дополняет его внутренними закулисными процессами компании (Backstage processes, IT-системы, операции сотрудников).", isCorrect: true, rationale: "Service Blueprint показывает «подводную часть айсберга» — какие внутренние системы сервиса обеспечивают каждый шаг пользователя из CJM." },
+                    { text: "Service Blueprint используется только в B2B, а CJM — исключительно в B2C.", isCorrect: false, rationale: "Оба инструмента универсальны." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в сервисном дизайне и системном картировании процессов." }
+                ]
+            },
+            {
+                category: "Проектирование сценариев",
+                question: "Что означает парадокс «Сначала бизнес, потом пользователь» при сборе требований к интерфейсу?",
+                options: [
+                    { text: "Дизайнер должен игнорировать удобство людей ради максимальной прибыли.", isCorrect: false, rationale: "Плохой UX уничтожит прибыль в долгосрочной перспективе." },
+                    { text: "Дизайнер должен сначала четко понять ограничения и бизнес-цели (метрики, ограничения разработки, юридические требования), чтобы спроектировать UX, который реален к запуску и приносит выгоду.", isCorrect: true, rationale: "Дизайн в вакууме без учета бизнес-ограничений приводит к тому, что макеты не идут в продакшн или ломают продукт." },
+                    { text: "Сначала макеты утверждаются генеральным директором, и только потом показываются исследователю.", isCorrect: false, rationale: "Это антипаттерн разработки." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в работе с продуктовыми ограничениями и арбитраже требований." }
+                ]
+            },
+            {
+                category: "Юзабилити-тестирование",
+                question: "Что такое Метод «Думай вслух» (Think Aloud Protocol) в юзабилити-тестировании и в чем его главный минус?",
+                options: [
+                    { text: "Тестировщик вслух критикует работу дизайнера; минус — дизайнер может обидеться.", isCorrect: false, rationale: "Не относится к методологии." },
+                    { text: "Пользователь проговаривает все свои мысли и действия в процессе выполнения задачи; минус — это повышает когнитивную нагрузку и может слегка замедлить естественные действия респондента.", isCorrect: true, rationale: "Метод дает бесценный качественный контекст о том, что происходит в голове у пользователя, но немного искажает естественную скорость прохождения сценария." },
+                    { text: "Метод требует записи разговора на профессиональный микрофон.", isCorrect: false, rationale: "Оборудование не является сутью метода." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проведении качественных тестирований интерфейсов." }
+                ]
+            },
+            {
+                category: "Метрики UX",
+                question: "Какая метрика показывает, насколько легко пользователю было решить свою задачу в интерфейсе по шкале от 1 до 7?",
+                options: [
+                    { text: "NPS (Net Promoter Score)", isCorrect: false, rationale: "NPS меряет готовность рекомендовать продукт." },
+                    { text: "CES (Customer Effort Score)", isCorrect: true, rationale: "CES (Оценка пользовательских усилий) замеряет, насколько просто или сложно было выполнить конкретное действие." },
+                    { text: "LTV (Lifetime Value)", isCorrect: false, rationale: "LTV — бизнес-метрика совокупной прибыли от клиента." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в знаниях целевых UX-метрик." }
+                ]
+            },
+            {
+                category: "Дизайн-мышление",
+                question: "В чем ключевое отличие подходов Job-to-be-Done (JTBD) и классических Personas (Персонажей)?",
+                options: [
+                    { text: "JTBD используется только в IT, а Персоны — в офлайн-ритейле.", isCorrect: false, rationale: "Оба фреймворка применяются везде." },
+                    { text: "Персоны фокусируются на демографии и характеристиках («Кто этот человек»), а JTBD — на контексте и трансформации («Какую работу пользователь нанимает этот продукт сделать в определенной ситуации»).", isCorrect: true, rationale: "JTBD смещает фокус с социально-демографических характеристик на мотиваторы и причину совершения покупки/действия." },
+                    { text: "JTBD — это вариант дизайна интерфейса без использования картинок.", isCorrect: false, rationale: "Не имеет отношения к графике." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в продуктовых фреймворках анализа целевой аудитории." }
+                ]
+            },
+            {
+                category: "Анализ данных",
+                question: "При анализе веб-аналитики вы видите: конверсия в покупку упала на 15%, но CTR кнопки «Купить» вырос на 30%. О чем это может свидетельствовать?",
+                options: [
+                    { text: "О технической ошибке на следующем шаге (например, сломалась форма оплаты или негрузятся поля) либо о несоответствии ожидания на кнопке реальному содержанию страницы.", isCorrect: true, rationale: "Кликбейтная кнопка или сломанный эквайринг часто дают рост кликабельности, но провал итоговой конверсии." },
+                    { text: "Это значит, что дизайн стал идеальным и ничего делать не нужно.", isCorrect: false, rationale: "Падение итоговой покупки — негативный показатель." },
+                    { text: "Пользователям перестал нравиться цвет кнопки.", isCorrect: false, rationale: "CTR вырос, значит на кнопку кликают чаще." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в продуктовой аналитике и поиске проблем в воронке." }
+                ]
+            },
+            {
+                category: "UX-исследования",
+                question: "Какое минимальное количество респондентов для юзабилити-тестирования рекомендуется Якобом Нильсеном (Nielsen Norman Group) для выявления ~85% основных проблем интерфейса?",
+                options: [
+                    { text: "100 респондентов", isCorrect: false, rationale: "Для качественных тестов это избыточно и дорого." },
+                    { text: "5 респондентов", isCorrect: true, rationale: "Знаменитое правило 5 пользователей: проведение качественного теста на 5 респондентах позволяет найти подавляющее большинство критических багов юзабилити." },
+                    { text: "30 респондентов", isCorrect: false, rationale: "30+ требуется для статистической значимости количественных тестов, а не качественных." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в базисе качественных юзабилити-исследований." }
+                ]
+            },
+            {
+                category: "Информационная архитектура",
+                question: "Что такое «Глубокая» против «Плоская» структура навигации (Deep vs Flat Navigation Architecture)?",
+                options: [
+                    { text: "Глубокая — это структура с 3D-эффектами, а плоская — с флэт-дизайном.", isCorrect: false, rationale: "Не относится к визуальному стилю." },
+                    { text: "Глубокая имеет много уровней вложенности (много кликов до цели, но короткие меню), а плоская — много пунктов на одном уровне (мало кликов, но нагруженные меню).", isCorrect: true, rationale: "Это баланс между шириной меню и глубиной кликабельности по дереву сайта." },
+                    { text: "Глубокая используется на мобильных, плоская — на десктопе.", isCorrect: false, rationale: "Это архитектурные паттерны для любых платформ." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании информационной архитектуры." }
+                ]
+            },
+            {
+                category: "Анализ данных",
+                question: "Что такое «Эффект Кобра» или Закон Гудхарта в контексте проектирования UX по метрикам?",
+                options: [
+                    { text: "Чем больше красного цвета, тем быстрее покупают.", isCorrect: false, rationale: "Не относится к закону." },
+                    { text: "Когда метрика становится целью (например, заставить кликнуть любой ценой), она перестает быть хорошей метрикой и приводит к ухудшению продукта.", isCorrect: true, rationale: "Оптимизация одной метрики любой ценой часто приводит к темным паттернам (Dark Patterns) и падению лояльности." },
+                    { text: "Пользователи всегда выбирают самый дешёвый товар.", isCorrect: false, rationale: "Не относится к закону Гудхарта." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в продуктовой философии и этике метрик." }
+                ]
+            },
+            {
+                category: "Качественные исследования",
+                question: "Какая главная опасность кроется в проведении Фокус-групп для проектирования интерфейсов?",
+                options: [
+                    { text: "Фокус-группы стоят слишком дешево.", isCorrect: false, rationale: "Они наоборот обходятся достаточно дорого." },
+                    { text: "Групповая динамика (Groupthink): более громкие участники навязывают свое мнение остальным, а люди говорят о том, как бы они поступили, а не демонстрируют реальное поведение за мокапом.", isCorrect: true, rationale: "Фокус-группы подходят для маркетинга, но непригодны для проверки юзабилити интерфейсов." },
+                    { text: "На фокус-группах нельзя показывать макеты.", isCorrect: false, rationale: "Показывать можно, но групповое обсуждение искажает индивидуальный опыт." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в выборе правильных инструментов исследований под задачу." }
+                ]
+            },
+            {
+                category: "Проектирование сценариев",
+                question: "Что такое Happy Path в UX-проектировании?",
+                options: [
+                    { text: "Страница с анимацией успеха после оплаты.", isCorrect: false, rationale: "Это элемент UI, а не весь сценарий." },
+                    { text: "Идеальный пользовательский сценарий выполнения задачи без ошибок, сбоев и отклонений.", isCorrect: true, rationale: "Это базовый сценарий («солнечный день»), поверх которого затем проектируются крайние случаи (Edge Cases) и ошибки." },
+                    { text: "Маршрут пользователя, получившего скидку.", isCorrect: false, rationale: "Не относится к архитектуре сценария." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в терминологии и этапах проектирования скетчей и флоу." }
+                ]
+            },
+            {
+                category: "UX-исследования",
+                question: "Зачем при проведении исследования проводят Триангуляцию данных (Data Triangulation)?",
+                options: [
+                    { text: "Чтобы построить трехмерную модель интерфейса.", isCorrect: false, rationale: "Не имеет отношения к 3D." },
+                    { text: "Чтобы сопоставить результаты из разных источников (например, аналитика + интервью + юзабилити-тесты) и исключить ошибки одного метода.", isCorrect: true, rationale: "Комбинация качественных и количественных методов дает наивысшую точность выводов." },
+                    { text: "Чтобы разделить пользователей на три равные группы.", isCorrect: false, rationale: "Это сегментация, а не триангуляция." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в комплексном анализе исследовательских данных." }
+                ]
+            },
+            {
+                category: "Метрики UX",
+                question: "Что означает показатель Task Completion Rate (TCR)?",
+                options: [
+                    { text: "Процент пользователей, успешно завершивших определенный сценарий от общего числа начавших.", isCorrect: true, rationale: "Фундаментальная метрика эффективности сценария в юзабилити-тестах." },
+                    { text: "Время, затраченное на создание одной страницы дизайнером.", isCorrect: false, rationale: "Это внутренняя производственная метрика." },
+                    { text: "Количество пройденных опросов за день.", isCorrect: false, rationale: "Не относится к TCR." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в замере результативности интерфейса." }
+                ]
+            },
+            {
+                category: "Продуктовые ограничения",
+                question: "Что такое Edge Case (Крайний / Пограничный случай) в проектировании интерфейсов?",
+                options: [
+                    { text: "Элемент, который расположен на самом краю экрана.", isCorrect: false, rationale: "Не связано с версткой." },
+                    { text: "Редкая, но возможная ситуация или состояние данных (например, слишком длинное имя пользователя из 100 символов или обрыв сети во время транзакции).", isCorrect: true, rationale: "Проектирование Edge Cases отличает сильного Middle/Senior дизайнера от новичка." },
+                    { text: "Ошибка дизайнера при выборе шрифта.", isCorrect: false, rationale: "Не относится к Edge Cases." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании устойчивых к сбоям интерфейсов." }
+                ]
+            },
+            {
+                category: "Качественные исследования",
+                question: "Что такое Метод Теневого Наблюдения (Shadowing / Contextual Inquiry)?",
+                options: [
+                    { text: "Скрытая запись пользователя через веб-камеру без его согласия.", isCorrect: false, rationale: "Это неэтично и незаконно." },
+                    { text: "Наблюдение за работой пользователя в его естественной среде (на рабочем месте/в дороге) с минимальным вмешательством для понимания реального контекста.", isCorrect: true, rationale: "Контекстное исследование раскрывает факторы окружения (шум, отвлечения, параллельные программы), которые не видны в лаборатории." },
+                    { text: "Тестирование темной темы интерфейса.", isCorrect: false, rationale: "Не имеет отношения к стилю." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в этнографических и полевых методах исследования." }
+                ]
+            },
+            {
+                category: "Дизайн-мышление",
+                question: "Что такое «Широкое и узкое мышление» в концепции Двойного Альянса / Двойного Ромба (Double Diamond)?",
+                options: [
+                    { text: "Дивергентное мышление (расширение вариантов) и Конвергентное мышление (сужение и сфокусированный выбор) на этапах исследования проблемы и решения.", isCorrect: true, rationale: "Double Diamond делит процесс на два ромба: поиск правильной проблемы и поиск правильного решения через дивергенцию и конвергенцию." },
+                    { text: "Мышление дизайнера и мышление программиста.", isCorrect: false, rationale: "Не относится к структуре Double Diamond." },
+                    { text: "Оценка макета на десктопе и смартфоне.", isCorrect: false, rationale: "Не связано с адаптивностью." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в фундаментальной модели проектирования Double Diamond." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswersLog = [];
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const categoryBadge = document.getElementById('category-badge');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            userAnswersLog = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            explanationBox.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const currentQ = questions[currentQuestionIndex];
+            progressIndicator.textContent = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+            categoryBadge.textContent = currentQ.category;
+            questionText.textContent = currentQ.question;
+
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                
+                if (option.isUnknown) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-dashed border-slate-600 bg-slate-900/40 hover:bg-slate-800 hover:border-slate-500 transition duration-200 text-slate-400 font-normal cursor-pointer flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-800/60 hover:bg-slate-800 hover:border-indigo-500 transition duration-200 text-slate-200 font-normal cursor-pointer flex items-center justify-between";
+                }
+
+                btn.innerHTML = `<span>${option.text}</span>`;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const selectedOption = currentQ.options[selectedIndex];
+            const optionButtons = optionsContainer.children;
+
+            currentQ.options.forEach((opt, idx) => {
+                const btn = optionButtons[idx];
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-800', 'hover:border-indigo-500', 'bg-slate-800/60');
+                
+                if (opt.isCorrect) {
+                    btn.classList.add('bg-emerald-950/60', 'border-emerald-500', 'text-emerald-200');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('bg-rose-950/60', 'border-rose-500', 'text-rose-200');
+                } else {
+                    btn.classList.add('opacity-40', 'border-slate-900');
+                }
+            });
+
+            if (selectedOption.isCorrect) {
+                score++;
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-emerald-950/40 border-emerald-500/40 text-emerald-200 leading-relaxed";
+                explanationText.textContent = "Верно! " + selectedOption.rationale;
+            } else {
+                userAnswersLog.push({
+                    question: currentQ.question,
+                    category: currentQ.category,
+                    isUnknown: selectedOption.isUnknown || false,
+                    rationale: currentQ.options.find(o => o.isCorrect).rationale
+                });
+
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-rose-950/40 border-rose-500/40 text-rose-200 leading-relaxed";
+                if (selectedOption.isUnknown) {
+                    explanationText.textContent = "Фиксируем пробел для изучения. " + currentQ.options.find(o => o.isCorrect).rationale;
+                } else {
+                    explanationText.textContent = "Несовсем так. " + currentQ.options.find(o => o.isCorrect).rationale;
+                }
+            }
+
+            explanationBox.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Посмотреть результаты трека";
+            } else {
+                nextBtn.textContent = "Следующий вопрос";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            document.getElementById('score-circle').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const descEl = document.getElementById('result-description');
+            const gapsContainer = document.getElementById('gaps-container');
+
+            if (score >= 18) {
+                titleEl.textContent = "Превосходный уровень исследовательской базы! 🏆";
+                descEl.textContent = "Вы отлично ориентируетесь в методологиях исследований, метриках и продуктовом анализе.";
+            } else if (score >= 12) {
+                titleEl.textContent = "Хороший результат! 👍";
+                descEl.textContent = "У вас есть база, но проявились конкретные точечные пробелы. Изучите список ниже.";
+            } else {
+                titleEl.textContent = "Зона роста выявлена 📚";
+                descEl.textContent = "Исследовательский блок требует углубления. Ниже приведен детальный список тем для проработки.";
+            }
+
+            gapsContainer.innerHTML = '';
+
+            if (userAnswersLog.length === 0) {
+                gapsContainer.innerHTML = `<div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 text-sm">Ошибок нет! Модуль пройден идеально.</div>`;
+            } else {
+                userAnswersLog.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm space-y-1";
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-indigo-400 font-semibold uppercase text-[10px] tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">${item.category}</span>
+                            <span class="${item.isUnknown ? 'text-amber-400' : 'text-rose-400'} font-medium text-[11px]">${item.isUnknown ? 'Затрудняюсь ответить' : 'Ошибка в ответе'}</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">${item.question}</p>
+                        <p class="text-slate-400 italic">${item.rationale}</p>
+                    `;
+                    gapsContainer.appendChild(div);
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

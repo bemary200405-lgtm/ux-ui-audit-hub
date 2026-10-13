@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX/UI Hardcore Audit — Модуль 2: Таблицы, Данные & ИА</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="py-5 px-4 bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-indigo-400">UX/UI Hardcore Audit (110Q System)</h1>
+                <p class="text-xs text-slate-400">Трек 2 из 5: Таблицы, Работа с данными & Информационная Архитектура</p>
+            </div>
+            <span id="progress-indicator" class="text-sm bg-slate-800 border border-slate-700 px-3.5 py-1.5 rounded-full text-slate-300 font-medium">Вопрос 1 из 25</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
+            <div class="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-400 rounded-full mb-5">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">Модуль 2: Таблицы и Сложные Данные</h2>
+            <p class="text-slate-400 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                Разбор зоны роста из вашего фидбека: правила выравнивания чисел и текста, моноширинные шрифты, фильтрация больших списков, пагинация vs скролл, статусы, визуальный шум и работа с плотными строками.
+            </p>
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 mb-6 text-left max-w-md mx-auto text-xs text-slate-300 space-y-1.5">
+                <p>✓ 25 глубоких вопросов с практической ориентацией.</p>
+                <p>✓ Визуальные вопросы с разбором графики и интерфейсов.</p>
+                <p>✓ Вариант <span class="text-indigo-400 font-semibold">«Не знаю»</span> для точной фиксации пробелов.</p>
+            </div>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-base">
+                Начать Трек 2 (25 вопросов)
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            
+            <div class="mb-3 flex justify-between items-center">
+                <span id="category-badge" class="text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"></span>
+            </div>
+
+            <h3 id="question-text" class="text-lg sm:text-xl font-semibold mb-5 text-slate-100 leading-snug"></h3>
+
+            <!-- Image Case -->
+            <div id="image-container" class="hidden mb-6 rounded-xl overflow-hidden border border-slate-700 bg-slate-950/80 p-2 text-center">
+                <img id="question-image" src="" alt="Кейс интерфейса" class="max-h-64 mx-auto rounded-lg object-contain">
+                <p id="image-caption" class="text-xs text-slate-400 mt-2 italic"></p>
+            </div>
+
+            <div id="options-container" class="space-y-3 mb-6"></div>
+
+            <div id="explanation-box" class="hidden p-4 rounded-xl mb-6 text-sm border">
+                <p id="explanation-text" class="font-medium leading-relaxed"></p>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl transition duration-200 cursor-pointer">
+                    Следующий вопрос
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="result-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-500/10 text-indigo-400 rounded-full mb-4 text-3xl font-extrabold border border-indigo-500/20" id="score-circle">
+                    0/25
+                </div>
+                <h2 id="result-title" class="text-2xl font-bold mb-2">Анализ Модуля 2 завершен</h2>
+                <p id="result-description" class="text-slate-400 max-w-lg mx-auto text-sm"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-6 mb-8">
+                <h3 class="text-base font-semibold mb-4 text-slate-200">Выявленные пробелы в работе с таблицами и данными:</h3>
+                <div id="gaps-container" class="space-y-3"></div>
+            </div>
+
+            <div class="text-center flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-6 py-3 rounded-xl transition duration-200 border border-slate-700 cursor-pointer">
+                    Пройти трек заново
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-900">
+        UX/UI Hardcore Audit System — Module 2 of 5
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                category: "Выравнивание данных",
+                question: "Почему в таблицах с финансовыми показателями критически важно использовать шрифт с моноширинными цифрами (Tabular Figures / `font-variant-numeric: tabular-nums`)?",
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Сравнение выравнивания чисел разной длины и разрядности",
+                options: [
+                    { text: "Это просто дань стилю минимализма и выглядит современнее.", isCorrect: false, rationale: "Эстетика здесь вторична, ключевая задача — функциональность." },
+                    { text: "Каждая цифра имеет одинаковую ширину ячейки, из-за чего разряды (сотни, тысячи, копейки) стоят строго друг под другом, что позволяет мгновенно сравнивать суммы вертикально.", isCorrect: true, rationale: "Пропорциональные цифры смещают разряды из-за разной ширины символов (например, '1' узкая, а '8' широкая), разрушая вертикальную ось сравнения." },
+                    { text: "Моноширинный шрифт ускоряет скорость рендеринга страницы браузером.", isCorrect: false, rationale: "Не влияет на производительность CSS-движка." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в типографике и стандартах отображения числовых данных." }
+                ]
+            },
+            {
+                category: "Плотность информации",
+                question: "Какое верное правило высоты строки (Row Density / Padding) при проектировании таблиц для профессиональных операторов (например, дилеров iGaming, трейдеров, бухгалтеров)?",
+                options: [
+                    { text: "Делать отступы минимум 32px сверху и снизу (высота строки 80px+), чтобы страница казалась 'воздушной'.", isCorrect: false, rationale: "Воздушный дизайн хорош для промо-сайтов, но для профи с большими массивами данных это фатально снизит объем видимой информации." },
+                    { text: "Использовать высокую плотность (Compact View: отступы 8-12px), давая возможность видеть максимум строк на одном экране без лишнего скролла, дополняя это возможностью переключения плотности (Compact/Comfortable).", isCorrect: true, rationale: "Профессионалам важна информационная плотность (Density), возможность охватить взглядом как можно больше строк за раз." },
+                    { text: "Плотность должна автоматически меняться в зависимости от времени суток.", isCorrect: false, rationale: "Плотность зависит от задач пользователя, а не от времени суток." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понимании разницы между B2C и B2B/Data-Dense интерфейсами." }
+                ]
+            },
+            {
+                category: "Закрепление элементов",
+                question: "В широкой таблице на 15 столбцов пользователь скроллит данные по горизонтали и теряет понимание, к какому объекту относятся цифры. Какое UI-решение обязано присутствовать?",
+                options: [
+                    { text: "Дублировать название объекта над каждой ячейкой.", isCorrect: false, rationale: "Это создаст огромный мусорный визуальный шум." },
+                    { text: "Использовать зафиксированный первый столбец (Freeze / Sticky Column) с ключевым идентификатором (ID, Имя) и зафиксированную шапку (Sticky Header).", isCorrect: true, rationale: "Фиксация ключевой колонки слева сохраняет контекст при горизонтальном скролле, а шапка — при вертикальном." },
+                    { text: "Запретить горизонтальный скролл и сжать все 15 столбцов в ширину 320px.", isCorrect: false, rationale: "Сжатие сделает текст нечитаемым и обрезанным." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в паттернах навигации по широким таблицам." }
+                ]
+            },
+            {
+                category: "Массовые действия",
+                question: "Как правильнее всего организовать пакетную обработку строк (Bulk Actions) в таблице (например, удалить или сменить статус 20 выбранным строкам)?",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Интерфейс панели управления с массовым выбором элементов",
+                options: [
+                    { text: "Показывать кнопки массовых действий всегда вверху над шапкой таблицы, даже если ни один чекбокс не выбран.", isCorrect: false, rationale: "Заблокированные неактивные кнопки создают визуальный шум." },
+                    { text: "Показывать всплывающую или появляющуюся панель массовых действий (Floating Bulk Toolbar) над шапкой только в момент, когда выбран хотя бы один чекбокс.", isCorrect: true, rationale: "Контекстная панель появляется только тогда, когда она нужна, показывая количество выбранных элементов и доступные действия." },
+                    { text: "Заставлять пользователя открывать каждую строку в отдельной вкладке по очереди.", isCorrect: false, rationale: "Разрушает массовый сценарий." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании паттернов Bulk Actions." }
+                ]
+            },
+            {
+                category: "Навигация по данным",
+                question: "В чем главное UX-отличие между классической Пагинацией (Pagination) и Бесконечным скроллом (Infinite Scroll) при работе с таблицами данных?",
+                options: [
+                    { text: "Пагинация используется на iOS, а бесконечный скролл — на Android.", isCorrect: false, rationale: "Не зависит от операционной системы." },
+                    { text: "Пагинация дает полный контроль над поиском конкретных страниц, позволяет легко вернуться к найденной строке и сохранять футер, в то время как бесконечный скролл подходит только для развлекательного контента.", isCorrect: true, rationale: "В рабочих таблицах бесконечный скролл катастрофичен: теряется позиция, невозможно добраться до футера и сослаться на конкретный массив." },
+                    { text: "Бесконечный скролл всегда загружается быстрее пагинации.", isCorrect: false, rationale: "Наоборот, при бесконечном скролле DOM перегружается и тормозит." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в выборе механизмов загрузки и навигации списков." }
+                ]
+            },
+            {
+                category: "Обработка пустых состояний",
+                question: "Таблица отфильтрована пользователем так, что ни одна строка не подходит под условия. Что должен увидеть пользователь на месте таблицы (Empty State)?",
+                options: [
+                    { text: "Полностью пустой белый экран без единого элемента.", isCorrect: false, rationale: "Вызовет ощущение, что сайт сломался или завис." },
+                    { text: "Сохранить шапку таблицы, а вместо строк показать понятную иллюстрацию/иконку с текстом 'Результатов не найдено' и кнопкой 'Сбросить фильтры'.", isCorrect: true, rationale: "Сохранение структуры таблицы и понятный сброс параметров дают мгновенную обратную связь и выход из тупика." },
+                    { text: "Автоматически закрыть браузер.", isCorrect: false, rationale: "Крайне деструктивное поведение." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании крайних состояний (Edge / Empty States)." }
+                ]
+            },
+            {
+                category: "Визуальный шум",
+                question: "Что из этого создает НАИБОЛЬШИЙ визуальный шум в таблице, мешая чтению информации?",
+                options: [
+                    { text: "Мягкий серый фоновый цвет при наведении на строку (Hover state).", isCorrect: false, rationale: "Hover полезен для отслеживания строки взглядом." },
+                    { text: "Яркие вертикальные и горизонтальные черные границы вокруг КАЖДОЙ ячейки толщиной 2px в сочетании с жирным капслоком во всех строках.", isCorrect: true, rationale: "Тяжелая сетка ячеек создает ощущение 'тюремной решетки', отвлекая глаз от контента." },
+                    { text: "Выравнивание названий по левому краю.", isCorrect: false, rationale: "Это базовый стандарт читаемости." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в работе с визуальным давлением и декомпозицией сетки." }
+                ]
+            },
+            {
+                category: "Статусные элементы",
+                question: "Как правильно визуализировать текстовые статусы в таблице (например, 'Оплачено', 'В обработке', 'Отклонено'), чтобы не превратить таблицу в 'новогоднюю елку'?",
+                options: [
+                    { text: "Закрасить весь фон соответствующих строк в ярко-красный, зеленый и желтый цвета.", isCorrect: false, rationale: "Заливка всей строки убивает читаемость остальных текста и чисел." },
+                    { text: "Использовать аккуратные бейджи/плашки с приглушенным пастельным фоном (Subtle backgrounds) и контрастным текстом с иконкой/точкой.", isCorrect: true, rationale: "Мягкие бейджи сохраняют чистый вид таблицы, акцентируя статус, но не перебивая соседние данные." },
+                    { text: "Использовать только смайлики без текста.", isCorrect: false, rationale: "Смайлики несерьезны и неуниверсальны для доступности." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в использовании цветовой индикации и системных компонентов." }
+                ]
+            },
+            {
+                category: "Сортировка данных",
+                question: "Как на UI заголовка столбца показать, что таблица отсортирована по данному столбцу по убыванию?",
+                options: [
+                    { text: "Сделать текст заголовка подчеркнутым розовым пунктиром.", isCorrect: false, rationale: "Нестандартный индикатор смутит пользователя." },
+                    { text: "Выделить этот заголовок контрастным цветом и поставить рядом активную стрелку направленную вниз (например, ↓), показывая текущую сортировку.", isCorrect: true, rationale: "Стандартный общепринятый паттерн с понятным направлением вектора сортировки." },
+                    { text: "Заголовок должен мигать.", isCorrect: false, rationale: "Анимация отвлекает." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в интерфейсных паттернах заголовков таблиц." }
+                ]
+            },
+            {
+                category: "Адаптивность таблиц",
+                question: "Какое решение является НАИБОЛЕЕ практичным для отображения таблицы из 10 столбцов на мобильном экране (375px)?",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Адаптация десктопных структур под мобильные экраны",
+                options: [
+                    { text: "Уменьшить шрифт всей таблицы до 6px, чтобы все 10 столбцов поместились без прокрутки.", isCorrect: false, rationale: "Текст станет нечитаемым на мобильном устройстве." },
+                    { text: "Трансформировать каждую строку таблицы в отдельную мобильную карточку (Card View) с акцентом на главный параметр или разрешить управляемый горизонтальный скролл таблицы внутри контейнера.", isCorrect: true, rationale: "Карточный вид или локальный горизонтальный скролл контейнера — золотые стандарты мобильной адаптации данных." },
+                    { text: "Удалить 8 столбцов из 10 для мобильных пользователей навсегда.", isCorrect: false, rationale: "Потеря данных лишит пользователей возможности решать задачи." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в адаптивном проектировании мобильных интерфейсов." }
+                ]
+            },
+            {
+                category: "Форматирование данных",
+                question: "Какое форматирование даты и времени является наименее двусмысленным для международных платформ (iGaming/FinTech)?",
+                options: [
+                    { text: "01/02/2026", isCorrect: false, rationale: "В США это 2 января, а в Европе — 1 февраля. Возникает фатальная путаница." },
+                    { text: "01 Feb 2026, 14:30 (или стандарт ISO YYYY-MM-DD)", isCorrect: true, rationale: "Текстовое сокращение месяца (Feb) исключает путаницу между днем и месяцем на международных проектах." },
+                    { text: "Только указание дня недели без даты.", isCorrect: false, rationale: "Не дает точной информации о моменте транзакции." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в глобализации и стандартах международной записи данных." }
+                ]
+            },
+            {
+                category: "Действия над строкой",
+                question: "Где целесообразно размещать действия над конкретной строкой (Редактировать, Удалить, Скачать) в таблице?",
+                options: [
+                    { text: "Строго в самом первом столбце перед всеми данными.", isCorrect: false, rationale: "Первый столбец должен отдаваться под главную суть (ID / Имя / Чекбокс)." },
+                    { text: "В самом крайнем правом столбце (Fixed Actions Column) в виде иконок или меню 'три точки', чтобы они были легко доступны после прочтения строки.", isCorrect: true, rationale: "Чтение идет слева направо: ознакомившись со строкой, взгляд логично приходит к действию в конце." },
+                    { text: "Сделать кнопки плавающими в центре строки.", isCorrect: false, rationale: "Перекрывает сами данные." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в композиционном распределении колонок." }
+                ]
+            },
+            {
+                category: "Фильтрация",
+                question: "В чем разница между быстрой фильтрацией (Live Filtering) и фильтрацией по кнопке 'Применить' (Apply Filters)?",
+                options: [
+                    { text: "Разницы нет, это одно и то же.", isCorrect: false, rationale: "Разница принципиальна в нагрузке и логике UX." },
+                    { text: "Live-фильтрация обновляет таблицу мгновенно при каждом клике, а кнопка 'Применить' необходима при сложных тяжелых фильтрах с множеством параметров, чтобы не перегружать сервер лишними запросами на каждом шаге.", isCorrect: true, rationale: "Если фильтров 10+ и база огромна, живая фильтрация затормозит систему. Кнопка 'Применить' дает пользователю выбрать все галочки и отправить один запрос." },
+                    { text: "Кнопку 'Применить' ставят только если нет мобильной версии.", isCorrect: false, rationale: "Это зависит от технических ограничений и объема данных." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании сложной фильтрации данных." }
+                ]
+            },
+            {
+                category: "Информационная архитектура",
+                question: "Что такое 'Иерархическая таблица' (Tree Grid / Accordion Table) и когда она необходима?",
+                options: [
+                    { text: "Таблица, нарисованная на фоне леса.", isCorrect: false, rationale: "Не относится к визуальной теме." },
+                    { text: "Таблица со вложенными дочерними строками, которые раскрываются по клику на стрелочку (например, Категория -> Подкатегории -> Товары).", isCorrect: true, rationale: "Позволяет не плодить кучу страниц, а изучать вложенные структуры данных на одном экране." },
+                    { text: "Таблица, которая печатается на бумаге.", isCorrect: false, rationale: "Не относится к архитектуре." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в паттернах сложных древовидных таблиц." }
+                ]
+            },
+            {
+                category: "Суммирование данных",
+                question: "Где должна располагаться строка итогов (Total / Summary Row) в финансовой таблице с пагинацией?",
+                options: [
+                    { text: "Строго на последней странице пагинации в самом низу.", isCorrect: false, rationale: "Придется листать 50 страниц, чтобы узнать итоговую сумму." },
+                    { text: "Зафиксирована внизу viewport (Sticky Footer) или прямо под шапкой таблицы, показывая итоги как по текущей странице, так и общие по всей базе.", isCorrect: true, rationale: "Пользователь всегда должен видеть итоговые метрики без лишних кликов по страницам." },
+                    { text: "Всплывать только при клике правым кликом мыши.", isCorrect: false, rationale: "Скрытый паттерн." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в паттернах работы с суммами и итоговыми значениями." }
+                ]
+            },
+            {
+                category: "Поиск по таблице",
+                question: "Как правильно должен работать поиск над таблицей с 10 000 записей?",
+                options: [
+                    { text: "Искать строго по полному совпадению с учетом регистра букв.", isCorrect: false, rationale: "Слишком жесткий поиск приведет к нулевым результатам при минорной ошибке." },
+                    { text: "Поддерживать нечувствительность к регистру, поиск по частичным вхождениям (Fuzzy Search), а также подсвечивать найденные совпадения желтым маркером в ячейках.", isCorrect: true, rationale: "Подсветка результатов дает понятный визуальный подтверждающий сигнал, почему именно эти строки появились." },
+                    { text: "Поиск должен стирать всю таблицу и выводить результаты в Telegram.", isCorrect: false, rationale: "Абсурдное поведение." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании поиска по базам данных." }
+                ]
+            },
+            {
+                category: "Разделители и воздух",
+                question: "В каком случае в таблице МОЖНО отказаться от горизонтальных линий-разделителей (Dividers) между строками?",
+                options: [
+                    { text: "Никогда, линии обязательны всегда.", isCorrect: false, rationale: "Это заблуждение." },
+                    { text: "Когда используется достаточное внутреннее вертикальное пространство (Padding) или чередующийся фоновый цвет строк (Zebra Striping), создающий визуальную границу без лишних линий.", isCorrect: true, rationale: "Негативное пространство и контраст фона заменяют жесткие линии, сокращая визуальный шум." },
+                    { text: "Если в таблице меньше 3 строк.", isCorrect: false, rationale: "Дело не в количестве строк, а в принципе композиции." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в микро-типографике и композиции таблиц." }
+                ]
+            },
+            {
+                category: "Перенос текста",
+                question: "Что делать, если название товара в ячейке не влезает в заданную ширину столбца?",
+                options: [
+                    { text: "Растягивать строку по высоте на 10 строчек текста вниз.", isCorrect: false, rationale: "Одна гигантская строка испортит сканируемость всей страницы." },
+                    { text: "Применять обрезку с многоточием (Text Truncation: `text-ellipsis`), а полный текст показывать во всплывающей подсказке (Tooltip) при наведении.", isCorrect: true, rationale: "Сохраняет аккуратную одинаковую высоту всех строк в таблице." },
+                    { text: "Обрезать текст на полуслове без многоточия.", isCorrect: false, rationale: "Пользователь подумает, что слова так и заканчиваются." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в обработке переполнения контента (Overflow text)." }
+                ]
+            },
+            {
+                category: "Информационная архитектура",
+                question: "Что такое 'Breadcrumbs' (Хлебные крошки) и какова их роль в сочетании с таблицами глубокой вложенности?",
+                options: [
+                    { text: "Еда для тестировщиков.", isCorrect: false, rationale: "Не связано с терминологией." },
+                    { text: "Вторичный навигационный элемент, показывающий путь от главного раздела к текущей глубине (Главная > Категории > Казино > Транзакции) и позволяющий быстро подняться на уровень вверх.", isCorrect: true, rationale: "Критичны для сохранения контекста местоположения в сложной структуре." },
+                    { text: "Кнопка удаления всех данных из таблицы.", isCorrect: false, rationale: "Не относится к навигации." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в базовых навигационных элементах." }
+                ]
+            },
+            {
+                category: "Загрузка данных",
+                question: "Как лучше всего показывать пользователю процесс загрузки данных в таблице при переключении страниц?",
+                options: [
+                    { text: "Полностью гасить экран в черный цвет.", isCorrect: false, rationale: "Вызовет испуг пользователя." },
+                    { text: "Использовать Skeleton Screens (скелетоны) на месте ячеек таблицы, сохраняя структуру сетки, чтобы не было скачков контента (Layout Shift).", isCorrect: true, rationale: "Скелетоны воспринимаются психологически быстрее, чем вертящийся спиннер по центру белого экрана." },
+                    { text: "Ничего не показывать, пусть думает, что зависло.", isCorrect: false, rationale: "Плохой UX." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании состояний загрузки (Loading States)." }
+                ]
+            },
+            {
+                category: "Действия с колонками",
+                question: "Зачем в продвинутых таблицах давать пользователю возможность скрывать/настраивать колонки (Column Visibility Toggle)?",
+                options: [
+                    { text: "Чтобы дизайнер меньше верстал.", isCorrect: false, rationale: "Не относится к причине." },
+                    { text: "Позволяет пользователю настроить рабочий стол под свои персональные задачи, скрыв 10 ненужных ему полей и оставив только важные.", isCorrect: true, rationale: "Кастомизация вида под роль пользователя снижает когнитивную нагрузку." },
+                    { text: "Это обязательное требование Apple App Store.", isCorrect: false, rationale: "Нет такого требования." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании настраиваемых UI рабочих пространств." }
+                ]
+            },
+            {
+                category: "Выделение текста",
+                question: "Почему ячейки таблицы должны поддерживать стандартное выделение и копирование текста мышью?",
+                options: [
+                    { text: "Чтобы разработчикам было легче писать код.", isCorrect: false, rationale: "Это важно для операторов." },
+                    { text: "Пользователи постоянно копируют номера транзакций, ID, email и суммы для вставки в другие системы и тикеты поддержки.", isCorrect: true, rationale: "Блокировка выделения текста в ячейках вызовет тихий ужас у любого B2B-оператора." },
+                    { text: "Это защищает таблицу от вирусов.", isCorrect: false, rationale: "Не имеет отношения к безопасности." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понимании паттернов работы с текстом в интерфейсах." }
+                ]
+            },
+            {
+                category: "Информационная архитектура",
+                question: "В чем разница между Модальным окном (Modal) и Боковой панелью (Drawer/Slide-over) при просмотре деталей строки таблицы?",
+                options: [
+                    { text: "Модальное окно всегда красное, а Drawer синий.", isCorrect: false, rationale: "Цвет не имеет значения." },
+                    { text: "Drawer выдвигается сбоку, сохраняя визуальный контекст всей таблицы на заднем фоне, в то время как модалка полностью перекрывает центр экрана.", isCorrect: true, rationale: "Slide-over панели идеальны для таблиц: можно кликать по строкам и смотреть детали справа, не закрывая окно каждый раз." },
+                    { text: "Drawer используется только для настроек профиля.", isCorrect: false, rationale: "Drawer — универсальный контейнер." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в выборе правильных паттернов детального просмотра." }
+                ]
+            },
+            {
+                category: "Редактирование данных",
+                question: "Что такое Inline Editing (редактирование по месту) в ячейках таблицы и когда его стоит избегать?",
+                options: [
+                    { text: "Изменение шрифта всей таблицы за один клик.", isCorrect: false, rationale: "Не относится к редактированию данных." },
+                    { text: "Возможность изменить значение прямо в ячейке таблицы без открытия отдельной формы; стоит избегать при риске случайного изменения критически важных финансовых транзакций.", isCorrect: true, rationale: "Inline editing ускоряет ввод, но опасен там, где случайный клик опечатки может списать деньги без подтверждения." },
+                    { text: "Редактирование картинки в Photoshop.", isCorrect: false, rationale: "Не относится к UI ячеек." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании паттернов ввода и редактирования." }
+                ]
+            },
+            {
+                category: "Экспорт данных",
+                question: "Где традиционно должна располагаться кнопка 'Экспорт в CSV/Excel' в интерфейсе с таблицей?",
+                options: [
+                    { text: "В самом низу под подвалом сайта.", isCorrect: false, rationale: "Ее будет тяжело искать." },
+                    { text: "В верхней панели управления рядом с кнопками фильтрации и поиска (Top Right Toolbar).", isCorrect: true, rationale: "Стандартное легкодоступное место для утилит работы с выгрузками." },
+                    { text: "Внутри каждой ячейки первой строки.", isCorrect: false, rationale: "Мусорный визуальный шум." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в расположении сервисных органов управления." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswersLog = [];
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const categoryBadge = document.getElementById('category-badge');
+        const questionText = document.getElementById('question-text');
+        const imageContainer = document.getElementById('image-container');
+        const questionImage = document.getElementById('question-image');
+        const imageCaption = document.getElementById('image-caption');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            userAnswersLog = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            explanationBox.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const currentQ = questions[currentQuestionIndex];
+            progressIndicator.textContent = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+            categoryBadge.textContent = currentQ.category;
+            questionText.textContent = currentQ.question;
+
+            if (currentQ.image) {
+                imageContainer.classList.remove('hidden');
+                questionImage.src = currentQ.image;
+                imageCaption.textContent = currentQ.imageCaption || "";
+            } else {
+                imageContainer.classList.add('hidden');
+            }
+
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                
+                if (option.isUnknown) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-dashed border-slate-600 bg-slate-900/40 hover:bg-slate-800 hover:border-slate-500 transition duration-200 text-slate-400 font-normal cursor-pointer flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-800/60 hover:bg-slate-800 hover:border-indigo-500 transition duration-200 text-slate-200 font-normal cursor-pointer flex items-center justify-between";
+                }
+
+                btn.innerHTML = `<span>${option.text}</span>`;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const selectedOption = currentQ.options[selectedIndex];
+            const optionButtons = optionsContainer.children;
+
+            currentQ.options.forEach((opt, idx) => {
+                const btn = optionButtons[idx];
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-800', 'hover:border-indigo-500', 'bg-slate-800/60');
+                
+                if (opt.isCorrect) {
+                    btn.classList.add('bg-emerald-950/60', 'border-emerald-500', 'text-emerald-200');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('bg-rose-950/60', 'border-rose-500', 'text-rose-200');
+                } else {
+                    btn.classList.add('opacity-40', 'border-slate-900');
+                }
+            });
+
+            if (selectedOption.isCorrect) {
+                score++;
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-emerald-950/40 border-emerald-500/40 text-emerald-200 leading-relaxed";
+                explanationText.textContent = "Верно! " + selectedOption.rationale;
+            } else {
+                userAnswersLog.push({
+                    question: currentQ.question,
+                    category: currentQ.category,
+                    isUnknown: selectedOption.isUnknown || false,
+                    rationale: currentQ.options.find(o => o.isCorrect).rationale
+                });
+
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-rose-950/40 border-rose-500/40 text-rose-200 leading-relaxed";
+                if (selectedOption.isUnknown) {
+                    explanationText.textContent = "Фиксируем пробел для изучения. " + currentQ.options.find(o => o.isCorrect).rationale;
+                } else {
+                    explanationText.textContent = "Не совсем так. " + currentQ.options.find(o => o.isCorrect).rationale;
+                }
+            }
+
+            explanationBox.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Посмотреть результаты трека";
+            } else {
+                nextBtn.textContent = "Следующий вопрос";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            document.getElementById('score-circle').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const descEl = document.getElementById('result-description');
+            const gapsContainer = document.getElementById('gaps-container');
+
+            if (score >= 22) {
+                titleEl.textContent = "Высший класс проектирования таблиц! 🏆";
+                descEl.textContent = "Вы закрыли главную тему своего фидбека и знаете все нюансы отображения сложных данных.";
+            } else if (score >= 15) {
+                titleEl.textContent = "Хороший уровень, но есть промахи! 👍";
+                descEl.textContent = "Основные принципы вам знакомы, но несколько тонкостей требуют дополнительной проработки.";
+            } else {
+                titleEl.textContent = "Главная зона роста подтвердилась 📚";
+                descEl.textContent = "Проектирование таблиц действительно нуждается в проработке. Ниже подробный разбор ваших ошибок.";
+            }
+
+            gapsContainer.innerHTML = '';
+
+            if (userAnswersLog.length === 0) {
+                gapsContainer.innerHTML = `<div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 text-sm">Все 25 вопросов отвечены идеально!</div>`;
+            } else {
+                userAnswersLog.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm space-y-1";
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-indigo-400 font-semibold uppercase text-[10px] tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">${item.category}</span>
+                            <span class="${item.isUnknown ? 'text-amber-400' : 'text-rose-400'} font-medium text-[11px]">${item.isUnknown ? 'Затрудняюсь ответить' : 'Ошибка в ответе'}</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">${item.question}</p>
+                        <p class="text-slate-400 italic">${item.rationale}</p>
+                    `;
+                    gapsContainer.appendChild(div);
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

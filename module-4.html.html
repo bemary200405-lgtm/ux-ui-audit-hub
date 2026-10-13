@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX/UI Hardcore Audit — Модуль 4: Законы UX, a11y & Психология</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="py-5 px-4 bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-indigo-400">UX/UI Hardcore Audit (110Q System)</h1>
+                <p class="text-xs text-slate-400">Трек 4 из 5: Законы UX, Доступность (a11y) & Психология восприятия</p>
+            </div>
+            <span id="progress-indicator" class="text-sm bg-slate-800 border border-slate-700 px-3.5 py-1.5 rounded-full text-slate-300 font-medium">Вопрос 1 из 20</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
+            <div class="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-400 rounded-full mb-5">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">Модуль 4: Законы UX, Доступность & Аргументация</h2>
+            <p class="text-slate-400 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                Проверка теоретического фундамента: законы Фиттса, Хика, Якоба, Постела, Гештальт-принципы, стандарты доступности WCAG 2.1 (AA/AAA), когнитивная нагрузка и защита решений перед заказчиком.
+            </p>
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 mb-6 text-left max-w-md mx-auto text-xs text-slate-300 space-y-1.5">
+                <p>✓ 20 хардкорных вопросов по законам UX и психологии.</p>
+                <p>✓ Визуальные кейсы на гештальт-принципы и доступность.</p>
+                <p>✓ Вариант <span class="text-indigo-400 font-semibold">«Не знаю»</span> для точной фиксации пробелов.</p>
+            </div>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-base">
+                Начать Трек 4 (20 вопросов)
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            
+            <div class="mb-3 flex justify-between items-center">
+                <span id="category-badge" class="text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"></span>
+            </div>
+
+            <h3 id="question-text" class="text-lg sm:text-xl font-semibold mb-5 text-slate-100 leading-snug"></h3>
+
+            <!-- Image Case -->
+            <div id="image-container" class="hidden mb-6 rounded-xl overflow-hidden border border-slate-700 bg-slate-950/80 p-2 text-center">
+                <img id="question-image" src="" alt="Визуальный UX кейс" class="max-h-64 mx-auto rounded-lg object-contain">
+                <p id="image-caption" class="text-xs text-slate-400 mt-2 italic"></p>
+            </div>
+
+            <div id="options-container" class="space-y-3 mb-6"></div>
+
+            <div id="explanation-box" class="hidden p-4 rounded-xl mb-6 text-sm border">
+                <p id="explanation-text" class="font-medium leading-relaxed"></p>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl transition duration-200 cursor-pointer">
+                    Следующий вопрос
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="result-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-500/10 text-indigo-400 rounded-full mb-4 text-3xl font-extrabold border border-indigo-500/20" id="score-circle">
+                    0/20
+                </div>
+                <h2 id="result-title" class="text-2xl font-bold mb-2">Анализ Модуля 4 завершен</h2>
+                <p id="result-description" class="text-slate-400 max-w-lg mx-auto text-sm"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-6 mb-8">
+                <h3 class="text-base font-semibold mb-4 text-slate-200">Выявленные пробелы в законах UX и доступности:</h3>
+                <div id="gaps-container" class="space-y-3"></div>
+            </div>
+
+            <div class="text-center flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-6 py-3 rounded-xl transition duration-200 border border-slate-700 cursor-pointer">
+                    Пройти трек заново
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-900">
+        UX/UI Hardcore Audit System — Module 4 of 5
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                category: "Законы UX",
+                question: "В чем суть Закона Якоба (Jakob's Law) и почему попытки полностью 'переизобрести' привычную навигацию сайта часто проваливаются?",
+                options: [
+                    { text: "Пользователи хотят видеть уникальный инновационный дизайн на каждом новом сайте.", isCorrect: false, rationale: "Инновации ради инноваций разрушают ментальную модель." },
+                    { text: "Пользователи проводят большую часть времени на ДРУГИХ сайтах, поэтому ожидают, что ваш продукт будет работать так же, как все остальные знакомые им интерфейсы.", isCorrect: true, rationale: "Закон Якоба объясняет значение ментальных моделей: следование привычным паттернам снижает когнитивную нагрузку и время обучения." },
+                    { text: "Сайты должны верстаться строго по сетке из 12 колонок.", isCorrect: false, rationale: "Не относится к закону Якоба." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в законах UX и ментальных моделях пользователей." }
+                ]
+            },
+            {
+                category: "Законы UX",
+                question: "Как Математика Закона Фиттса объясняет, почему края и углы экрана монитора (Desktop) являются 'бесконечно большими' и удобными кликабельными зонами?",
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Углы экрана и физика движения курсора мыши",
+                options: [
+                    { text: "Потому что углы экрана закрашены в более яркие цвета.", isCorrect: false, rationale: "Цвет не имеет отношения к кинематике движения мыши." },
+                    { text: "Курсор мыши 'упирается' в край экрана и физически не может проскочить дальше, превращая таргетинг по краю в мгновенное действие без риска промаха.", isCorrect: true, rationale: "Закон Фиттса: $T = a + b \\log_2(1 + D/S)$. Для углов и краев экрана размер цели $S$ становится условно бесконечным, так как курсор тормозится рамкой дисплея." },
+                    { text: "В углах экрана шрифты рендерятся четче.", isCorrect: false, rationale: "Рендеринг одинаков на всей площади дисплея." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в применении закона Фиттса для десктопных интерфейсов." }
+                ]
+            },
+            {
+                category: "Доступность (a11y)",
+                question: "Какое правильное минимальное отношение контрастности для обычного текста (до 18pt) по стандарту WCAG 2.1 Level AA?",
+                options: [
+                    { text: "3.0 : 1", isCorrect: false, rationale: "3:1 допускается только для крупного текста (от 18pt/24px или 14pt bold) и элементов UI." },
+                    { text: "4.5 : 1", isCorrect: true, rationale: "Стандарт WCAG AA требует контраст минимум 4.5:1 для обычного текста и 3:1 для крупных заголовков." },
+                    { text: "7.0 : 1", isCorrect: false, rationale: "7:1 — это более высокий уровень WCAG AAA." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в точном знании контрастных коэффициентов WCAG." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "Что описывает Закон Близости (Law of Proximity) в гештальт-психологии дизайна?",
+                options: [
+                    { text: "Объекты одного цвета воспринимаются как важные.", isCorrect: false, rationale: "Это Закон Сходства (Similarity)." },
+                    { text: "Объекты, расположенные близко друг к другу, воспринимаются глазом как единая связанная группа, отделенная от других элементов более крупным отступом.", isCorrect: true, rationale: "Отступы между элементами создают логические группы (заголовок ближе к своему абзацу, чем к предыдущему)." },
+                    { text: "Все элементы должны быть одинакового размера.", isCorrect: false, rationale: "Не относится к близости." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в гештальт-принципах группировки контента." }
+                ]
+            },
+            {
+                category: "Законы UX",
+                question: "В чем суть Закона Постела (Robustness Principle / Postel's Law) при проектировании сложного взаимодействия?",
+                options: [
+                    { text: "Дизайн должен быть максимально минималистичным.", isCorrect: false, rationale: "Не о минимализме." },
+                    { text: "'Будь либерален к тому, что принимаешь от пользователя, и строг к тому, что отправляешь наружу' — интерфейс должен сглаживать ошибки ввода (например, считывать телефон в любых форматах с пробелами, тире или +7/8).", isCorrect: true, rationale: "Закон Постела снижает стресс пользователя: система сама форматирует «грязный» ввод." },
+                    { text: "Дизайнер должен лично перезванивать каждому клиенту.", isCorrect: false, rationale: "Не относится к принципу." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании устойчивых к ошибкам форм." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "Что такое Эффект края (Serial Position Effect), состоящий из эффекта первичности и эффекта новизны?",
+                options: [
+                    { text: "Пользователи обращают внимание только на середину списка.", isCorrect: false, rationale: "Середина списка запоминается хуже всего." },
+                    { text: "Люди лучше всего запоминают ПЕРВЫЙ (Primacy Effect) и ПОСЛЕДНИЙ (Recency Effect) элементы в списке, а середину выпадают из памяти.", isCorrect: true, rationale: "Обосновывает, почему главные целевые кнопки выносят в самое начало или конец навигации." },
+                    { text: "Эффект, возникающий при скролле страницы до подвала.", isCorrect: false, rationale: "Не относится к психологическому эффекту." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в когнитивных особенностях человеческой памяти." }
+                ]
+            },
+            {
+                category: "Доступность (a11y)",
+                question: "Что такое 'Focus Ring' (Стиль фокуса) и почему его НЕЛЬЗЯ удалять с помощью CSS `outline: none` без альтернативной замены?",
+                options: [
+                    { text: "Это декоративное кольцо для красоты.", isCorrect: false, rationale: "Это критичный элемент навигации." },
+                    { text: "Визуальный индикатор выделения активного элемента при навигации с клавиатуры (клавишей Tab); его удаление делает сайт полностью неиспользуемым для незрячих и людей с ограниченной моторикой.", isCorrect: true, rationale: "Без фокус-ринга пользователь с клавиатурой не видит, на какой кнопке находится курсор." },
+                    { text: "Focus Ring нужен только на мобильных смартфонах.", isCorrect: false, rationale: "Нужен в первую очередь для клавиатурного ввода на Desktop." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в клавиатурной доступности интерфейсов." }
+                ]
+            },
+            {
+                category: "Законы UX",
+                question: "Как Эффект Эстетика-Удобство (Aesthetic-Usability Effect) влияет на результаты юзабилити-тестирования?",
+                options: [
+                    { text: "Красивые интерфейсы всегда работают без ошибок.", isCorrect: false, rationale: "Красота не исправляет сломанную логику." },
+                    { text: "Пользователи воспринимают эстетически привлекательный дизайн как БОЛЕЕ удобный и склонны прощать мелкие UX-ошибки и задержки системы.", isCorrect: true, rationale: "Положительные эмоции от визуального слоя снижают раздражение от мелких багов." },
+                    { text: "Красивый дизайн снижает конверсию на 50%.", isCorrect: false, rationale: "Противоречит явлению." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понимании влияния визуального дизайна на UX." }
+                ]
+            },
+            {
+                category: "Законы UX",
+                question: "Что описывает Закон Миллера (Miller's Law) в контексте кратковременной памяти?",
+                options: [
+                    { text: "Человек может удержать в рабочей памяти $7 \\pm 2$ элемента (от 5 до 9 объектов) одновременно.", isCorrect: true, rationale: "Закон Миллера обосновывает группировку (Chunking) номеров карт, телефонов и пунктов меню." },
+                    { text: "Любой проект занимает в 2 раза больше времени, чем планировалось.", isCorrect: false, rationale: "Это закон Хофштадтера." },
+                    { text: "На экране должно быть не больше 3 цветов.", isCorrect: false, rationale: "Не относится к Миллеру." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в ограничении объема рабочей памяти." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "Что такое 'Когнитивная нагрузка' (Cognitive Load) и какова задача UX-дизайнера по ее снижению?",
+                options: [
+                    { text: "Количество мегабайт, которое загружает процессор.", isCorrect: false, rationale: "Это техническая нагрузка." },
+                    { text: "Суммарный объем умственных усилий, требуемый от пользователя для обработки информации и принятия решения в интерфейсе.", isCorrect: true, rationale: "UX-дизайнер минимизирует постороннюю (Extraneous) когнитивную нагрузку, пряча лишнее и упрощая выбор." },
+                    { text: "Время работы человека за компьютером без перерыва.", isCorrect: false, rationale: "Не относится к когнитивной нагрузке UX." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в управлении вниманием и ментальным истощением пользователя." }
+                ]
+            },
+            {
+                category: "Доступность (a11y)",
+                question: "Какое ключевое правило использования цвета существует для передачи важной информации (например, ошибок или успешных статусов)?",
+                options: [
+                    { text: "Использовать только чистый красный и чистый зеленый цвета.", isCorrect: false, rationale: "Дальтоники (протанопия/дейтеранопия) не определят разницу между ними." },
+                    { text: "Цвет НЕ ДОЛЖЕН быть единственным способом передачи информации — его всегда нужно дублировать иконкой, текстом или паттерном.", isCorrect: true, rationale: "Обеспечивает понятность интерфейса для 8% мужчин с нарушениями цветового зрения." },
+                    { text: "Запрещено использовать цвета кроме черного и белого.", isCorrect: false, rationale: "Цвет использовать можно, но с дублированием смысла." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в стандартах цветовой доступности для людей с дальтонизмом." }
+                ]
+            },
+            {
+                category: "Законы UX",
+                question: "Что такое Закон Теслера (Law of Conservation of Complexity / Закон сохранения сложности)?",
+                options: [
+                    { text: "Каждый новый экран удваивает время разработки.", isCorrect: false, rationale: "Не относится к закону." },
+                    { text: "В любой системе существует непонижаемый объем сложности; вопрос лишь в том, кто ее берет на себя — пользователь или разработчики/дизайнеры.", isCorrect: true, rationale: "Скрывая сложность от пользователя (например, автоопределение города по IP), дизайнер берет эту сложность на алгоритмы." },
+                    { text: "Сложные программы всегда работают медленнее.", isCorrect: false, rationale: "Не относится к Закону Теслера." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в балансе сложности систем." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "Как работает 'Баннерная слепота' (Banner Blindness) и как она мешает пользователям замечать важную информацию?",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Пример визуальной перегрузки и баннерных блоков",
+                options: [
+                    { text: "Пользователи физически слепнут от яркого света монитора.", isCorrect: false, rationale: "Медицинская глупость." },
+                    { text: "Пользователи бессознательно игнорируют элементы, которые визуально похожи на рекламу (яркие плашки, анимации, правый сайдбар), даже если там лежит нужный контент.", isCorrect: true, rationale: "Если важная инструкция задизайнена как пестрый рекламный баннер, люди просто проскроллят ее мимо." },
+                    { text: "Баннеры блокируются браузером автоматически.", isCorrect: false, rationale: "Речь идет о психологическом игнорировании глазом." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в подстерегающих психофизиологических эффектах восприятия." }
+                ]
+            },
+            {
+                category: "Доступность (a11y)",
+                question: "Зачем изображениям в коде необходим атрибут `alt` (Alternative Text)?",
+                options: [
+                    { text: "Чтобы картинка быстрее загружалась.", isCorrect: false, rationale: "Alt не влияет на скорость загрузки." },
+                    { text: "Экранные дикторы (Screen Readers) зачитывают alt-текст незрячим пользователям, а также он отображается, если картинка не загрузилась.", isCorrect: true, rationale: "Обеспечивает эквивалентный текстовый контекст для визуального графического контента." },
+                    { text: "Alt-текст защищает картинку от скачивания.", isCorrect: false, rationale: "Не защищает от копирования." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в семантике HTML и доступности контента." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "Что описывает Закон Фигуры и Фона (Figure/Ground) в интерфейсах?",
+                options: [
+                    { text: "Размер шрифта должен соответствовать размеру экрана.", isCorrect: false, rationale: "Не относится к Закону Фигуры и Фона." },
+                    { text: "Человеческий глаз автоматически разделяет поле зрения на главный объект внимания (фигура) и задний план (фон) — на этом строится работа модальных окон с оверлеем (Dimmed background).", isCorrect: true, rationale: "Затемнение фона за модальным окном переводит внимание на передний план (фигуру)." },
+                    { text: "Фон всегда должен быть белым.", isCorrect: false, rationale: "Фон может быть любого цвета." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в гештальт-принципах управления фокусом." }
+                ]
+            },
+            {
+                category: "Аргументация решений",
+                question: "Стейкхолдер настаивает на удалении текстовых подписей у иконок в главном меню ради 'минимализма'. Каким правилом юзабилити обосновать необходимость сохранения текста?",
+                options: [
+                    { text: "Иконки без текста нарушают Узнаваемость (Recognition rather than recall): большинство абстрактных иконок двусмысленны и заставляют пользователя гадать или совершать лишние ховеры.", isCorrect: true, rationale: "Лишь единицы иконок (дом, лупа, корзина, шестеренка) универсальны. Остальные без текста фатально снижают скорость навигации." },
+                    { text: "Без текста сайт перестанет индексироваться Яндекс.Директом.", isCorrect: false, rationale: "Причина в UX навигации, а не в рекламе." },
+                    { text: "Текст нужен, чтобы занять пустое место.", isCorrect: false, rationale: "Слабый неаргументированный ответ." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в аргументации необходимости текстовых ярлыков." }
+                ]
+            },
+            {
+                category: "Законы UX",
+                question: "Что такое Закон Достижимости Большим Пальцем (Thumb Zone) при проектировании мобильных интерфейсов?",
+                options: [
+                    { text: "Палец должен помещаться в динамик смартфона.", isCorrect: false, rationale: "Не относится к эргономике экрана." },
+                    { text: "Зона экрана смартфона, до которой пользователь может легко дотянуться большим пальцем одной руки без перехвата корпуса (самые важные действия выносятся вниз в Bottom Navigation).", isCorrect: true, rationale: "Мобильная эргономика диктует размещение ключевых органов управления в нижней третьей части экрана." },
+                    { text: "Отпечаток пальца для сканера Touch ID.", isCorrect: false, rationale: "Не относится к зоне взаимодействия." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в мобильной эргономике и зонах взаимодействия." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "В чем суть Эффекта Зейгарник в проектировании воронки онбординга или заполнения профиля?",
+                options: [
+                    { text: "Люди забывают все задачи в пятницу вечером.", isCorrect: false, rationale: "Бытовое суждение." },
+                    { text: "Незавершенные действия или прерванные задачи создают внутреннее психоэмоциональное напряжение, из-за чего человек стремится довести начатое до конца (Progress bar: 'Ваш профиль заполнен на 70%').", isCorrect: true, rationale: "Индикаторы прогресса (Progress indicators) используют Эффект Зейгарник для подталкивания к дозаполнению данных." },
+                    { text: "Пользователи предпочитают длинные статьи коротких.", isCorrect: false, rationale: "Не связано с эффектом." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в геймификации и психологических триггерах завершения действий." }
+                ]
+            },
+            {
+                category: "Доступность (a11y)",
+                question: "Какой минимальный размер кликабельной области (Touch Target Size) рекомендуют Apple (HIG) и Google (Material Design) для мобильных устройств?",
+                options: [
+                    { text: "10 x 10 px", isCorrect: false, rationale: "В такую мелкую кнопку невозможно попасть пальцем." },
+                    { text: "44 x 44 pt (Apple) / 48 x 48 dp (Google)", isCorrect: true, rationale: "Физический размер подушечки человеческого пальца требует таргета от 9-10 мм (около 44-48px) для исключения промахов." },
+                    { text: "100 x 100 px", isCorrect: false, rationale: "Избыточно крупный размер для базовых иконок." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в мобильных тач-стандартах эргономики." }
+                ]
+            },
+            {
+                category: "Психология восприятия",
+                question: "Что такое 'Dark Patterns' (Темные паттерны) в UX и почему их использование разрушает продукт в долгосрочной перспективе?",
+                options: [
+                    { text: "Использование черного фона в ночное время.", isCorrect: false, rationale: "Это просто тема оформления." },
+                    { text: "Интерфейсные уловки и манипуляции (скрытые подписки, автогалочки, ложные счетчики), заставляющие пользователя совершить невыгодное действие, ломая доверие к бренду.", isCorrect: true, rationale: "Темные паттерны дают сиюминутный всплеск метрики, но вызывают отток (Churn) и судебные риски." },
+                    { text: "Кнопки с размытыми тенями.", isCorrect: false, rationale: "Обычный стиль." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понимании этики UX и темных паттернов." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswersLog = [];
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const categoryBadge = document.getElementById('category-badge');
+        const questionText = document.getElementById('question-text');
+        const imageContainer = document.getElementById('image-container');
+        const questionImage = document.getElementById('question-image');
+        const imageCaption = document.getElementById('image-caption');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            userAnswersLog = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            explanationBox.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const currentQ = questions[currentQuestionIndex];
+            progressIndicator.textContent = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+            categoryBadge.textContent = currentQ.category;
+            questionText.textContent = currentQ.question;
+
+            if (currentQ.image) {
+                imageContainer.classList.remove('hidden');
+                questionImage.src = currentQ.image;
+                imageCaption.textContent = currentQ.imageCaption || "";
+            } else {
+                imageContainer.classList.add('hidden');
+            }
+
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                
+                if (option.isUnknown) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-dashed border-slate-600 bg-slate-900/40 hover:bg-slate-800 hover:border-slate-500 transition duration-200 text-slate-400 font-normal cursor-pointer flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-800/60 hover:bg-slate-800 hover:border-indigo-500 transition duration-200 text-slate-200 font-normal cursor-pointer flex items-center justify-between";
+                }
+
+                btn.innerHTML = `<span>${option.text}</span>`;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const selectedOption = currentQ.options[selectedIndex];
+            const optionButtons = optionsContainer.children;
+
+            currentQ.options.forEach((opt, idx) => {
+                const btn = optionButtons[idx];
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-800', 'hover:border-indigo-500', 'bg-slate-800/60');
+                
+                if (opt.isCorrect) {
+                    btn.classList.add('bg-emerald-950/60', 'border-emerald-500', 'text-emerald-200');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('bg-rose-950/60', 'border-rose-500', 'text-rose-200');
+                } else {
+                    btn.classList.add('opacity-40', 'border-slate-900');
+                }
+            });
+
+            if (selectedOption.isCorrect) {
+                score++;
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-emerald-950/40 border-emerald-500/40 text-emerald-200 leading-relaxed";
+                explanationText.textContent = "Верно! " + selectedOption.rationale;
+            } else {
+                userAnswersLog.push({
+                    question: currentQ.question,
+                    category: currentQ.category,
+                    isUnknown: selectedOption.isUnknown || false,
+                    rationale: currentQ.options.find(o => o.isCorrect).rationale
+                });
+
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-rose-950/40 border-rose-500/40 text-rose-200 leading-relaxed";
+                if (selectedOption.isUnknown) {
+                    explanationText.textContent = "Фиксируем пробел для изучения. " + currentQ.options.find(o => o.isCorrect).rationale;
+                } else {
+                    explanationText.textContent = "Не совсем так. " + currentQ.options.find(o => o.isCorrect).rationale;
+                }
+            }
+
+            explanationBox.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Посмотреть результаты трека";
+            } else {
+                nextBtn.textContent = "Следующий вопрос";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            document.getElementById('score-circle').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const descEl = document.getElementById('result-description');
+            const gapsContainer = document.getElementById('gaps-container');
+
+            if (score >= 18) {
+                titleEl.textContent = "Сильный теоретический базис! 🏆";
+                descEl.textContent = "Вы отлично знаете законы UX, стандарты доступности WCAG и методы аргументации решений.";
+            } else if (score >= 12) {
+                titleEl.textContent = "Хороший результат! 👍";
+                descEl.textContent = "У вас отличный фундамент, но есть несколько непроработанных законов или коэффициентов контраста.";
+            } else {
+                titleEl.textContent = "Выявлены пробелы в теории UX 📚";
+                descEl.textContent = "Для уверенной аргументации на собеседованиях стоит глубже изучить законы UX и гайдлайны доступности.";
+            }
+
+            gapsContainer.innerHTML = '';
+
+            if (userAnswersLog.length === 0) {
+                gapsContainer.innerHTML = `<div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 text-sm">Все 20 вопросов отвечены идеально!</div>`;
+            } else {
+                userAnswersLog.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm space-y-1";
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-indigo-400 font-semibold uppercase text-[10px] tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">${item.category}</span>
+                            <span class="${item.isUnknown ? 'text-amber-400' : 'text-rose-400'} font-medium text-[11px]">${item.isUnknown ? 'Затрудняюсь ответить' : 'Ошибка в ответе'}</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">${item.question}</p>
+                        <p class="text-slate-400 italic">${item.rationale}</p>
+                    `;
+                    gapsContainer.appendChild(div);
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

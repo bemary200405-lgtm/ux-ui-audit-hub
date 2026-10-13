@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX/UI Hardcore Audit — Модуль 5: Ограничения, Баннеры & iGaming UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="py-5 px-4 bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-indigo-400">UX/UI Hardcore Audit (110Q System)</h1>
+                <p class="text-xs text-slate-400">Финал (Трек 5 из 5): Ограничения задач, Баннеры, iGaming UI & Арбитраж</p>
+            </div>
+            <span id="progress-indicator" class="text-sm bg-slate-800 border border-slate-700 px-3.5 py-1.5 rounded-full text-slate-300 font-medium">Вопрос 1 из 20</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
+            <div class="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-400 rounded-full mb-5">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">Модуль 5: Ограничения, Баннеры & iGaming UI</h2>
+            <p class="text-slate-400 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                Закрываем тему работы с ограничениями задачи: размещение дисклеймеров и длинных обязательных текстов на промо-баннерах, превентивная обработка ошибок в iGaming/Fintech, композиция в условиях дефицита места и бизнес-арбитраж.
+            </p>
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 mb-6 text-left max-w-md mx-auto text-xs text-slate-300 space-y-1.5">
+                <p>✓ 20 практических вопросов на умение работать со сложными лимитами.</p>
+                <p>✓ Визуальные кейсы по банерам и промо-карточкам.</p>
+                <p>✓ Вариант <span class="text-indigo-400 font-semibold">«Не знаю»</span> для подведения итогового бюджета знаний.</p>
+            </div>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-base">
+                Начать Трек 5 (20 вопросов)
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            
+            <div class="mb-3 flex justify-between items-center">
+                <span id="category-badge" class="text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"></span>
+            </div>
+
+            <h3 id="question-text" class="text-lg sm:text-xl font-semibold mb-5 text-slate-100 leading-snug"></h3>
+
+            <!-- Image Case -->
+            <div id="image-container" class="hidden mb-6 rounded-xl overflow-hidden border border-slate-700 bg-slate-950/80 p-2 text-center">
+                <img id="question-image" src="" alt="Кейс баннера или интерфейса" class="max-h-64 mx-auto rounded-lg object-contain">
+                <p id="image-caption" class="text-xs text-slate-400 mt-2 italic"></p>
+            </div>
+
+            <div id="options-container" class="space-y-3 mb-6"></div>
+
+            <div id="explanation-box" class="hidden p-4 rounded-xl mb-6 text-sm border">
+                <p id="explanation-text" class="font-medium leading-relaxed"></p>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl transition duration-200 cursor-pointer">
+                    Следующий вопрос
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="result-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-500/10 text-indigo-400 rounded-full mb-4 text-3xl font-extrabold border border-indigo-500/20" id="score-circle">
+                    0/20
+                </div>
+                <h2 id="result-title" class="text-2xl font-bold mb-2">Все 5 модулей успешно пройдены! 🎉</h2>
+                <p id="result-description" class="text-slate-400 max-w-lg mx-auto text-sm"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-6 mb-8">
+                <h3 class="text-base font-semibold mb-4 text-slate-200">Финализация пробелов по Модулю 5:</h3>
+                <div id="gaps-container" class="space-y-3"></div>
+            </div>
+
+            <div class="text-center flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-6 py-3 rounded-xl transition duration-200 border border-slate-700 cursor-pointer">
+                    Пройти трек заново
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-900">
+        UX/UI Hardcore Audit System — Final Module 5 of 5
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                category: "Работа с ограничениями",
+                question: "ТЗ на баннер содержит 4 обязательных юридических условия (18+, правила акции, номер лицензии, условия отыгрыша) и крупную кнопку. Места катастрофически мало. Какая ошибка проектирования недопустима?",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Сложная баннерная композиция в условиях ограниченного размера",
+                options: [
+                    { text: "Полностью удалить лицензию и 18+, вынеся только ссылку на правила.", isCorrect: false, rationale: "Удаление юридически обязательных дисклеймеров блокирует публикацию баннера юристами и может привезти к юридическим штрафам." },
+                    { text: "Уменьшить дисклеймеры до микроскопического незаметного размера 3px, закрасив их в цвет фона.", isCorrect: false, rationale: "Сокрытие текста маскировкой противоречит законам о рекламе и бракуется арт-директорами." },
+                    { text: "Построить четкую информационную иерархию: главный оффер + CTA сделать визуальным центром, а дисклеймеры сгруппировать аккуратным контрастным блоком внизу с минимально допустимым читаемым кеглем (8-10pt), соблюдая отступы.", isCorrect: true, rationale: "Грамотный дизайнер находит композиционный баланс, учитывая ВСЕ требования ТЗ без потери читаемости оффера и нарушения законов." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в учетных ограничениях и верстке промо-баннеров." }
+                ]
+            },
+            {
+                category: "iGaming UI",
+                question: "В интерфейсе онлайн-казино или ставок пользователь находится в состоянии азарта и повышенного эмоционального напряжения. Какое правило UX защиты от нежелательных действий критично на кнопке 'Сделать ставку'?",
+                options: [
+                    { text: "Списать деньги сразу при наведении мыши на кнопку.", isCorrect: false, rationale: "Фатальный dark pattern, разрушающий доверие." },
+                    { text: "Использовать подтверждение в один клик с возможностью отмены в течение 3-5 секунд (Undo Toast) или слайдер свайпа (Swipe to Bet) для исключения случайного мисклика.", isCorrect: true, rationale: "Защита от случайных кликов пальцем или мышью спасает пользователя от потери депозита и снижает негативный фидбек." },
+                    { text: "Запрашивать ввод пароля из 16 символов перед каждой ставкой в 10 рублей.", isCorrect: false, rationale: "Фатально убивает конверсию игры." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании специфических паттернов iGaming и Fintech." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "Вам поступила задача спроектировать баннер для мобильного приложения (размер 320x100px). В исходном тексте от маркетинга 250 символов. Как поступить?",
+                options: [
+                    { text: "Засунуть все 250 символов, сделав шрифт мелким и плотным.", isCorrect: false, rationale: "Превратит баннер в нечитаемое серое пятно." },
+                    { text: "Выделить из текста заголовок-крючок (2-4 слова), ключевую выгоду и кнопку, а полный текст акции перенести на посадочную страницу (Landing page / Pop-up), открывающуюся по клику.", isCorrect: true, rationale: "Баннер на мобильном экране — это точка входа, задача которой привлечь внимание и перенаправить за деталями, а не вместить весь лендинг." },
+                    { text: "Отказаться от создания баннера.", isCorrect: false, rationale: "Дизайнер должен уметь резать информационный шум в рамках контекста." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в сокращении контента под ограничения мобильных форматов." }
+                ]
+            },
+            {
+                category: "Превентивный UX",
+                question: "Пользователь пытается вывести выигранные средства в казино, но его аккаунт не верифицирован (нужен KYC). Как правильно спроектировать этот сценарий?",
+                options: [
+                    { text: "Показать ошибку 'Ошибка 403' без объяснения причин.", isCorrect: false, rationale: "Вызовет панику и агрессию пользователя." },
+                    { text: "Заблокировать кнопку вывода и показать понятный баннер/степпер: 'Для вывода средств пройдите быструю верификацию паспорта (занимает 2 минуты)' с прямой кнопкой перехода к загрузке документов.", isCorrect: true, rationale: "Объяснение причины + пошаговое руководство + короткое время выполнения снижают негатив от юридического барьера." },
+                    { text: "Списать деньги в пользу казино.", isCorrect: false, rationale: "Незаконно." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в обработке тупиковых и юридических сценариев (KYC/AML)." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "При проектировании промо-карточки товара/игры выяснилось, что заголовок на немецком языке из-за специфики длины слов не влезает в 2 строки. Какое правильное UI-решение?",
+                options: [
+                    { text: "Уменьшить размер шрифта заглавных букв до произвольного размера `11.3px` только для немецкой версии.", isCorrect: false, rationale: "Разрушает систему типографических токенов макета." },
+                    { text: "Заложить в компонент гибкий перенос (Hyphenation), использование Auto Layout с `Fill Container` и динамический расчёт строк (Line-height) под локализацию.", isCorrect: true, rationale: "Локализация (i18n) требует запаса места по ширине/высоте на 30-40% под длинные языки (немецкий, финский)." },
+                    { text: "Стереть последние буквы в немецких словах.", isCorrect: false, rationale: "Исказит смысл слов." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в учете мультиязычных ограничений (i18n)." }
+                ]
+            },
+            {
+                category: "Композиция баннеров",
+                question: "Что из этого является главным правилом размещения слогана, кнопки и персонажа на рекламном баннере с точки зрения движения взгляда (Z-pattern / F-pattern)?",
+                options: [
+                    { text: "Кнопку CTA поставить в левый верхний угол, а заголовок в самый низ.", isCorrect: false, rationale: "Нарушает естественный порядок восприятия 'Оффер -> Действие'." },
+                    { text: "Заголовок и оффер размещаются в левой/верхней части (где начинается чтение), персонаж/арт — справа, а итоговая кнопка CTA — внизу справа или по центру под оффером.", isCorrect: true, rationale: "Следование естественному вектору движения глаза человека (слева направо, сверху вниз) ведет пользователя от смысла к действию." },
+                    { text: "Все элементы набросать хаотично в центр.", isCorrect: false, rationale: "Создает композиционный хаос." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в композиционных паттернах внимания на баннерах." }
+                ]
+            },
+            {
+                category: "iGaming UI",
+                question: "В интерфейсах слотов и оригинальных игр критически важен показатель 'RTP' (Return to Player) и правила игры. Где они должны располагаться?",
+                options: [
+                    { text: "Их нужно полностью скрыть и никому не показывать.", isCorrect: false, rationale: "Нарушает правила лицензиаров (MGA, Curacao) и снижает доверие." },
+                    { text: "Должны быть легко доступны через иконку 'i' (Info) или '?' в шапке/футере игрового экрана, открываясь в компактном модальном окне или слайд-овере.", isCorrect: true, rationale: "Не перегружает игровой экран, но дает игроку прозрачный доступ к правилам в 1 клик." },
+                    { text: "Присылаться письмом на почту через 3 дня.", isCorrect: false, rationale: "Неудобно и неактуально в моменте игры." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в расположении справочной информации игровых интерфейсов." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "Вам нужно разместить на одном экране карточки с 8 разными бонусами (промокоды, фриспины, кэшбэк). Пользователь путается. Как ограничить визуальное давление?",
+                options: [
+                    { text: "Сделать все 8 карточек мигающими гифками разных цветов.", isCorrect: false, rationale: "Превратит экран в визуальный ад и вызовет уход с сайта." },
+                    { text: "Применить приоритизацию: выделить 1 главный бонус дня (Featured Bonus) крупным блоком, а остальные 7 разместить сеткой с фильтрацией по категориям (Кэшбэк/Фриспины).", isCorrect: true, rationale: "Принцип Хика в действии: выделение главного фокусирует внимание, а категории упрощают выбор." },
+                    { text: "Удалить 7 бонусов из 8.", isCorrect: false, rationale: "Бизнес потеряет маркетинговую воронку." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в структурировании множественных промо-предложений." }
+                ]
+            },
+            {
+                category: "Бизнес-арбитраж",
+                question: "Маркетинг просит добавить на экран транзакции 3 сторонних рекламных баннера. Вы понимаете, что это сломает сценарий оплаты. Как профессионально решить конфликт?",
+                options: [
+                    { text: "Устроить скандал в рабочем чате.", isCorrect: false, rationale: "Непрофессионально." },
+                    { text: "Показать данные исследований/тестов: реклама на экране оплаты снижает конверсию успешных платежей на X%, что принесет компании больше убытков, чем доход от баннеров, и предложить альтернативную точку (например, экран успешной оплаты Thank You Page).", isCorrect: true, rationale: "Аргументация языком денег и выгоды для компании в сочетании с альтернативным решением — идеальный продуктовый подбор." },
+                    { text: "Молча поставить 3 баннера поверх кнопки оплаты.", isCorrect: false, rationale: "Разрушает UX и платежную конверсию." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в защите UX перед маркетингом и продуктовыми метриками." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "Что делать с текстом кнопки, если при переводе на другой язык слово 'Купить' (6 символов) превращается в фразеологизм из 35 символов?",
+                options: [
+                    { text: "Растянуть кнопку на 3 строчки текста.", isCorrect: false, rationale: "Многострочные кнопки выглядят плохо и ломают верстку." },
+                    { text: "Согласовать с копирайтерами/переводчиками емкий лаконичный синоним или переверстать форму с выносом длинной поясняющей фразы НАД кнопкой, оставив на кнопке короткое глагольное действие.", isCorrect: true, rationale: "Кнопка должна содержать четкий короткий глагол действия, а детали выносятся в контекстный текст рядом." },
+                    { text: "Оставить кнопку без текста только с иконкой.", isCorrect: false, rationale: "Может быть недопонято в специфическом контексте." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в совместной работе с текстами интерфейса (UX Writing)." }
+                ]
+            },
+            {
+                category: "Превентивный UX",
+                question: "При вводе суммы вывода средств система имеет лимит: минимум 1 000 ₽, максимум 50 000 ₽. Как лучше всего спроектировать поле ввода?",
+                options: [
+                    { text: "Дать ввести любую сумму, а при клике 'Вывести' показать красную ошибку.", isCorrect: false, rationale: "Заставляет делать лишние действия и расстраивает пользователя постфактум." },
+                    { text: "Показать динамические подсказки под полем ('Мин: 1 000 ₽, Макс: 50 000 ₽'), добавить кнопки быстрых сумм (25%, 50%, Max) и делать мгновенную валидацию с блокировкой кнопки при выходе за лимиты.", isCorrect: true, rationale: "Превентивные микроподсказки и быстрые кнопки предотвращают ошибку еще до отправки формы." },
+                    { text: "Автоматически списывать всю зарплату.", isCorrect: false, rationale: "Абсурд." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании финансово ограниченых полей ввода." }
+                ]
+            },
+            {
+                category: "iGaming UI",
+                question: "В скиновых рулетках/магазинах (CS:GO / Dota 2) предметы имеют разную степень ценности и износа. Как это должно отражаться в UI карточки товара?",
+                options: [
+                    { text: "Все карточки должны быть одинаково серыми.", isCorrect: false, rationale: "Теряется ценность игровых предметов." },
+                    { text: "Использовать стандартную цветовую кодировку rarity (Common, Rare, Arcana/Exotic) через цветные рамки/свечения, подписи качества (FN, MW) и четкие плашки цен.", isCorrect: true, rationale: "Геймеры привыкли к общепринятой цветовой иерархии редкости предметов, это ускоряет навигацию." },
+                    { text: "Скрывать название предмета до покупки.", isCorrect: false, rationale: "Никто не станет покупать 'кота в мешке'." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в визуальной кодировке игровой атрибутики." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "Что делать с баннером, если на мобильном устройстве в вертикальной ориентации картинка персонажа перекрывает заголовок акционной скидки?",
+                options: [
+                    { text: "Оставить как есть, пусть читают сквозь ногу персонажа.", isCorrect: false, rationale: "Плохая верстка." },
+                    { text: "Настроить адаптивный макет: на мобайле перестроить верстку с горизонтальной на вертикальную (персонаж сверху/снизу, текст под ним) или применить плашку-затемнение (Gradient Overlay) под текст.", isCorrect: true, rationale: "Адаптивность баннеров требует изменения сетки под пропорции экрана устройства." },
+                    { text: "Удалить картинку персонажа вообще на всех устройствах.", isCorrect: false, rationale: "Разрушает визуальную привлекательность на десктопе." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в адаптивной верстке промо-композиций." }
+                ]
+            },
+            {
+                category: "Превентивный UX",
+                question: "В форме депозита пользователь может выбрать 10 способов оплаты (карты, крипта, СБП, кошельки). Места на экране мало. Какое решение лучше всего?",
+                options: [
+                    { text: "Выстроить 10 гигантских логотипов в 1 вертикальный список на 5 экранов скролла.", isCorrect: false, rationale: "Создаст бесконечный скролл." },
+                    { text: "Сгруппировать методы по вкладкам/категориям (Карты, СБП/Быстрые, Криптовалюта), выделив популярные методы и запоминая последний использованный метод пользователя.", isCorrect: true, rationale: "Персонализация + группировка сокращают время совершения повторного депозита до 2 секунд." },
+                    { text: "Оставить только криптовалюту.", isCorrect: false, rationale: "Отрежет клиентов, платящих картами." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в оптимизации платежных сценариев." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "Вам нужно разместить на баннере таймер обратного отсчета акции ('До конца осталось 02:14:55'). Как задизайнить его в рамках компонентов Figma?",
+                options: [
+                    { text: "Нарисовать таймер обычной картинкой без учета смены цифр.", isCorrect: false, rationale: "При смене цифр моноширинность поплывет и текст сожмется." },
+                    { text: "Использовать моноширинные цифры (Tabular nums) в фрейме с фиксированной шириной ячеек для каждой цифры, чтобы при тикании секунд баннер не дергался и не прыгал по ширине.", isCorrect: true, rationale: "Учет динамического изменения контента (тиканье секунд) гарантирует стабильность верстки без сдвигов (Layout shift)." },
+                    { text: "Сделать таймер размерностью 100px на 100px.", isCorrect: false, rationale: "Не гарантирует отсутствие сдвигов при пропорциональном шрифте." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании динамических анимированных компонентов." }
+                ]
+            },
+            {
+                category: "Бизнес-арбитраж",
+                question: "Что делать, если юридический отдел требует разместить на странице регистрации текст Пользовательского соглашения объемом 15 страниц прямо на экране?",
+                options: [
+                    { text: "Вставить весь текст 15 страниц прямо в форму регистрации.", isCorrect: false, rationale: "Форма превратится в бесконечную простыню текста, регистрация упадет до нуля." },
+                    { text: "Сделать ссылку на Соглашение ('Нажимая «Зарегистрироваться», вы принимаете Условия соглашения'), открывающуюся в отдельном окне/модале, и чекбокс, если это строго требуется законом региона.", isCorrect: true, rationale: "Стандартный паттерн, соблюдающий юридические требования и не ломающий конверсию воронки." },
+                    { text: "Игнорировать юристов.", isCorrect: false, rationale: "Приведет к блокировке продукта." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в согласовании длинных юридических документов в UI." }
+                ]
+            },
+            {
+                category: "Композиция баннеров",
+                question: "Какая контрастность текста оффера считается хорошей относительно пестрого графического фона баннера (например, арт из игры)?",
+                options: [
+                    { text: "Текст пишется прямо поверх ярких деталей арта без подложек.", isCorrect: false, rationale: "Текст сливается с артом и становится нечитаемым." },
+                    { text: "Использование темной/светлой градиентной подложки (Scrim/Overlay), плашки или размытия (Backdrop blur) под текстом для создания строго контрастного фона.", isCorrect: true, rationale: "Грамотный градиентный подслой сохраняет сочность арта и делает текст на 100% читаемым." },
+                    { text: "Текст закрашивается прозрачным цветом.", isCorrect: false, rationale: "Текст исчезнет." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в приемах повышения читаемости текста на графике." }
+                ]
+            },
+            {
+                category: "iGaming UI",
+                question: "Зачем в казино-платформах и играх внедряют инструмент 'Responsible Gambling' (Ответственная игра — лимиты депозитов, самоисключение)?",
+                options: [
+                    { text: "Чтобы разозлить игроков.", isCorrect: false, rationale: "Это инструмент заботы и соблюдения законов." },
+                    { text: "Это обязательное международное лицензионное требование (MGA/UKGC) и этический стандарт UX, помогающий игрокам контролировать бюджет и защищающий бизнес от штрафов.", isCorrect: true, rationale: "Наличие удобных инструментов Responsible Gambling — маркер зрелого международного iGaming-продукта." },
+                    { text: "Это способ поднять цены на игры.", isCorrect: false, rationale: "Не относится к ценообразованию." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понимании стандартов Responsible Gambling." }
+                ]
+            },
+            {
+                category: "Работа с ограничениями",
+                question: "Как корректно спроектировать поведение кнопки CTA на баннере при наведении (Hover State) и нажатии (Active State)?",
+                options: [
+                    { text: "Кнопка должна резко увеличиваться в 5 раз и закрывать весь баннер.", isCorrect: false, rationale: "Деструктивное поведение." },
+                    { text: "Предусмотреть понятную микро-индикацию (смена оттенка, легкое поднятие/тень, изменение курсора на `pointer`), дающую мгновенную обратную связь об интерактивности.", isCorrect: true, rationale: "Микрофидбек дает пользователю уверенность, что система отреагировала на нажатие." },
+                    { text: "Никак не менять кнопку.", isCorrect: false, rationale: "Не дает фидбека о кликабельности." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в микровзаимодействиях и состояниях интерактивных элементов." }
+                ]
+            },
+            {
+                category: "Итоговый арбитраж",
+                question: "Главный вывод: Из каких 3 составляющих строится качественная аргументация любого дизайн-решения на финальном собеседовании?",
+                options: [
+                    { text: "Вкус дизайнера + Тренды Dribbble + Личное мнение.", isCorrect: false, rationale: "Субъективный набор, не имеющий веса для бизнеса." },
+                    { text: "Опора на исследования/пользовательские сценарии (UX) + Соблюдение гайдлайнов/законов/ограничений (Constraints) + Влияние на продуктовые и бизнес-метрики (Business Goals).", isCorrect: true, rationale: "Это золотой триугольник аргументации сильного Middle/Senior дизайнера." },
+                    { text: "Красивые градиенты + Скорость работы + Согласие с любым мнением арт-директора.", isCorrect: false, rationale: "Не отражает аргументацию решений." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в структурировании аргументации дизайна." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswersLog = [];
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const categoryBadge = document.getElementById('category-badge');
+        const questionText = document.getElementById('question-text');
+        const imageContainer = document.getElementById('image-container');
+        const questionImage = document.getElementById('question-image');
+        const imageCaption = document.getElementById('image-caption');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            userAnswersLog = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            explanationBox.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const currentQ = questions[currentQuestionIndex];
+            progressIndicator.textContent = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+            categoryBadge.textContent = currentQ.category;
+            questionText.textContent = currentQ.question;
+
+            if (currentQ.image) {
+                imageContainer.classList.remove('hidden');
+                questionImage.src = currentQ.image;
+                imageCaption.textContent = currentQ.imageCaption || "";
+            } else {
+                imageContainer.classList.add('hidden');
+            }
+
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                
+                if (option.isUnknown) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-dashed border-slate-600 bg-slate-900/40 hover:bg-slate-800 hover:border-slate-500 transition duration-200 text-slate-400 font-normal cursor-pointer flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-800/60 hover:bg-slate-800 hover:border-indigo-500 transition duration-200 text-slate-200 font-normal cursor-pointer flex items-center justify-between";
+                }
+
+                btn.innerHTML = `<span>${option.text}</span>`;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const selectedOption = currentQ.options[selectedIndex];
+            const optionButtons = optionsContainer.children;
+
+            currentQ.options.forEach((opt, idx) => {
+                const btn = optionButtons[idx];
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-800', 'hover:border-indigo-500', 'bg-slate-800/60');
+                
+                if (opt.isCorrect) {
+                    btn.classList.add('bg-emerald-950/60', 'border-emerald-500', 'text-emerald-200');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('bg-rose-950/60', 'border-rose-500', 'text-rose-200');
+                } else {
+                    btn.classList.add('opacity-40', 'border-slate-900');
+                }
+            });
+
+            if (selectedOption.isCorrect) {
+                score++;
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-emerald-950/40 border-emerald-500/40 text-emerald-200 leading-relaxed";
+                explanationText.textContent = "Верно! " + selectedOption.rationale;
+            } else {
+                userAnswersLog.push({
+                    question: currentQ.question,
+                    category: currentQ.category,
+                    isUnknown: selectedOption.isUnknown || false,
+                    rationale: currentQ.options.find(o => o.isCorrect).rationale
+                });
+
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-rose-950/40 border-rose-500/40 text-rose-200 leading-relaxed";
+                if (selectedOption.isUnknown) {
+                    explanationText.textContent = "Фиксируем пробел для изучения. " + currentQ.options.find(o => o.isCorrect).rationale;
+                } else {
+                    explanationText.textContent = "Не совсем так. " + currentQ.options.find(o => o.isCorrect).rationale;
+                }
+            }
+
+            explanationBox.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Завершить полный аудит знаний";
+            } else {
+                nextBtn.textContent = "Следующий вопрос";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            document.getElementById('score-circle').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const descEl = document.getElementById('result-description');
+            const gapsContainer = document.getElementById('gaps-container');
+
+            if (score >= 18) {
+                titleEl.textContent = "Полная готовность к любым собеседованиям! 🏆";
+                descEl.textContent = "Вы прошли весь цикл из 110 вопросов! Пробел с ограничениями задач и баннерами полностью закрыт.";
+            } else if (score >= 12) {
+                titleEl.textContent = "Хороший результат! 👍";
+                descEl.textContent = "Вы здорово подтянули работу с ограничениями. Посмотрите оставшиеся темы в списке ошибок.";
+            } else {
+                titleEl.textContent = "Зона роста по ограничениям подсвечена 📚";
+                descEl.textContent = "Изучите список вопросов ниже, чтобы научиться легко верстать баннеры с юридическими дисклеймерами и лимитами ТЗ.";
+            }
+
+            gapsContainer.innerHTML = '';
+
+            if (userAnswersLog.length === 0) {
+                gapsContainer.innerHTML = `<div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 text-sm">Модуль 5 пройден без единой ошибки!</div>`;
+            } else {
+                userAnswersLog.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm space-y-1";
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-indigo-400 font-semibold uppercase text-[10px] tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">${item.category}</span>
+                            <span class="${item.isUnknown ? 'text-amber-400' : 'text-rose-400'} font-medium text-[11px]">${item.isUnknown ? 'Затрудняюсь ответить' : 'Ошибка в ответе'}</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">${item.question}</p>
+                        <p class="text-slate-400 italic">${item.rationale}</p>
+                    `;
+                    gapsContainer.appendChild(div);
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

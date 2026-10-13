@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX/UI Hardcore Audit — Модуль 3: Design Systems & Figma Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="py-5 px-4 bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-indigo-400">UX/UI Hardcore Audit (110Q System)</h1>
+                <p class="text-xs text-slate-400">Трек 3 из 5: Design Systems, Tokens, Figma & Component Architecture</p>
+            </div>
+            <span id="progress-indicator" class="text-sm bg-slate-800 border border-slate-700 px-3.5 py-1.5 rounded-full text-slate-300 font-medium">Вопрос 1 из 25</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
+            <div class="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-400 rounded-full mb-5">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">Модуль 3: Design Systems & Figma Architecture</h2>
+            <p class="text-slate-400 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                Глубокая проверка системного мышления: разница между UI Kit и Design System, 3-уровневая архитектура Design Tokens (Global, Semantic, Component), Auto Layout 5.0, Component Properties, Slot-компоненты и версионирование.
+            </p>
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 mb-6 text-left max-w-md mx-auto text-xs text-slate-300 space-y-1.5">
+                <p>✓ 25 хардкорных вопросов по системному дизайну.</p>
+                <p>✓ Визуальные вопросы с разбором структуры компонента в Figma.</p>
+                <p>✓ Вариант <span class="text-indigo-400 font-semibold">«Не знаю»</span> для фиксации личных пробелов.</p>
+            </div>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 cursor-pointer text-base">
+                Начать Трек 3 (25 вопросов)
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            
+            <div class="mb-3 flex justify-between items-center">
+                <span id="category-badge" class="text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"></span>
+            </div>
+
+            <h3 id="question-text" class="text-lg sm:text-xl font-semibold mb-5 text-slate-100 leading-snug"></h3>
+
+            <!-- Image Case -->
+            <div id="image-container" class="hidden mb-6 rounded-xl overflow-hidden border border-slate-700 bg-slate-950/80 p-2 text-center">
+                <img id="question-image" src="" alt="Кейс Figma компонента" class="max-h-64 mx-auto rounded-lg object-contain">
+                <p id="image-caption" class="text-xs text-slate-400 mt-2 italic"></p>
+            </div>
+
+            <div id="options-container" class="space-y-3 mb-6"></div>
+
+            <div id="explanation-box" class="hidden p-4 rounded-xl mb-6 text-sm border">
+                <p id="explanation-text" class="font-medium leading-relaxed"></p>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl transition duration-200 cursor-pointer">
+                    Следующий вопрос
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="result-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-500/10 text-indigo-400 rounded-full mb-4 text-3xl font-extrabold border border-indigo-500/20" id="score-circle">
+                    0/25
+                </div>
+                <h2 id="result-title" class="text-2xl font-bold mb-2">Анализ Модуля 3 завершен</h2>
+                <p id="result-description" class="text-slate-400 max-w-lg mx-auto text-sm"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-6 mb-8">
+                <h3 class="text-base font-semibold mb-4 text-slate-200">Выявленные пробелы в Design Systems & Figma Architecture:</h3>
+                <div id="gaps-container" class="space-y-3"></div>
+            </div>
+
+            <div class="text-center flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-6 py-3 rounded-xl transition duration-200 border border-slate-700 cursor-pointer">
+                    Пройти трек заново
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-900">
+        UX/UI Hardcore Audit System — Module 3 of 5
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                category: "Архитектура систем",
+                question: "В чем фундаментальное отличие UI Kit от полноценной Design System (Дизайн-системы)?",
+                image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+                imageCaption: "Экосистема дизайн-системы и библиотеки компонентов",
+                options: [
+                    { text: "UI Kit стоит денег, а Design System распространяется бесплатно.", isCorrect: false, rationale: "Коммерческая модель не имеет отношения к понятию системы." },
+                    { text: "UI Kit — это просто набор UI-элементов и стилей в графическом редакторе, а Design System — это комплексный продукт, включающий библиотеку Figma, синхронизированную библиотеку компонентов в коде (React/Vue/iOS), токены, документацию, гайдлайны и процессы взаимодействия команд.", isCorrect: true, rationale: "Дизайн-система живет и в дизайне, и в коде, поддерживая единый источник правды (Single Source of Truth) между разработкой и продуктом." },
+                    { text: "UI Kit используется для сайтов, а Design System — исключительно для B2B дашбордов.", isCorrect: false, rationale: "Оба инструмента платформонезависимы." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в понятийном аппарате и устройстве продуктов на системном уровне." }
+                ]
+            },
+            {
+                category: "Design Tokens",
+                question: "Какая иерархия слоев токенов считаются золотым стандартом масштабируемой дизайн-системы?",
+                options: [
+                    { text: "1 уровень: Просто список всех HEX-кодов цветов без названий.", isCorrect: false, rationale: "Это отсутствие системы." },
+                    { text: "3 уровня: Primitive/Global Tokens (сиро-сырые значения `#1F2937`) -> Semantic Tokens (`color-bg-primary`) -> Component-level Tokens (`button-primary-bg-hover`).", isCorrect: true, rationale: "Примитивы хранят абсолютные значения, семантика отвечает за назначение в теме, а токен компонента привязывает его к узкому месту." },
+                    { text: "2 уровня: Токены для мобилок и токены для десктопа.", isCorrect: false, rationale: "Токены не делятся по устройствам напрямую, они описывают системные свойства." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании 3-слойной архитектуры Design Tokens." }
+                ]
+            },
+            {
+                category: "Figma Component Properties",
+                question: "Зачем использовать Component Properties (Boolean, Text, Instance Swap, Variant) вместо плоского пложения сотен вариантов одного компонента?",
+                options: [
+                    { text: "Чтобы файл Figma весил больше и дольше грузился.", isCorrect: false, rationale: "Наоборот, свёрнутые свойства ускоряют работу файла." },
+                    { text: "Это кардинально сокращает количество вариантов внутри компонента (Memory Usage), упрощает панели настроек для дизайнеров и ускоряет поддержку библиотеки.", isCorrect: true, rationale: "Вместо 128 комбинированных вариантов кнопки можно сделать 4 варианта размера/типа и управлять тумблерами иконками и текстом через свойства." },
+                    { text: "Component Properties отменяет необходимость использования Auto Layout.", isCorrect: false, rationale: "Auto Layout используется параллельно для верстки структуры." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в современной оптимизации компонентов в Figma." }
+                ]
+            },
+            {
+                category: "Slot Pattern",
+                question: "Что такое 'Slot Pattern' (Слот-компонент / Слот-контейнер) в Figma и для чего он применяется?",
+                options: [
+                    { text: "Специальный игрок в iGaming казино.", isCorrect: false, rationale: "Не относится к игровым слотам." },
+                    { text: "Пустой плейсхолдер-компонент внутри сложного системного элемента (например, модального окна или карточки), который дизайнер может подменять на любой свой локальный контент через Instance Swap.", isCorrect: true, rationale: "Слот дает гибкость: зафиксированная системная обвязка модалки (шапка, футер, крестик) остаётся нетронутой, а в центр вставляется любой макет." },
+                    { text: "Инструмент для анимации кнопок.", isCorrect: false, rationale: "Не относится к прототипированию." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в гибком архитектурном проектировании составных компонентов." }
+                ]
+            },
+            {
+                category: "Figma Auto Layout",
+                question: "В чем разница между свойствами `Hug Contents`, `Fill Container` и `Fixed Width/Height` в Auto Layout?",
+                options: [
+                    { text: "Разницы нет, они работают одинаково.", isCorrect: false, rationale: "Каждое свойство отвечает за принципиально разную логику ресайза." },
+                    { text: "`Hug` сжимает фрейм по размеру внутреннего контента, `Fill` растягивает элемент на всю доступную ширину родительского фрейма, `Fixed` задает жесткий фиксированный размер в пикселях.", isCorrect: true, rationale: "Это прямое отражение верстки (CSS: `width: auto`, `width: 100%`, `width: 300px`), необходимое для корректного адаптива компонентов." },
+                    { text: "`Fill` используется только для картинок, а `Hug` только для кнопок.", isCorrect: false, rationale: "Свойства универсальны для любых слоев." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в базовых механиках адаптивной верстки макетов в Figma." }
+                ]
+            },
+            {
+                category: "Атомарный дизайн",
+                question: "Какова верная иерархия элементов согласно методологии Atomic Design Брэда Фроста?",
+                options: [
+                    { text: "Молекулы -> Атомы -> Организмы -> Шаблоны -> Страницы.", isCorrect: false, rationale: "Атомы являются наименьшей неделимой частицей." },
+                    { text: "Атомы (кнопка, инпут) -> Молекулы (форма поиска) -> Организмы (шапка сайта) -> Шаблоны (сетка макета) -> Страницы (реальный контент).", isCorrect: true, rationale: "Классическая цепочка усложнения компонентов от базовых частиц к готовому интерфейсу." },
+                    { text: "Страницы -> Атомы -> Молекулы.", isCorrect: false, rationale: "Перепутана последовательность." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в классической методологии построения дизайн-систем." }
+                ]
+            },
+            {
+                category: "Поддержка систем",
+                question: "Что происходит при Breaking Change (Разрушающем изменении) в библиотеке компонентов и как его правильно проводить?",
+                options: [
+                    { text: "Удалить старый компонент из файла, не предупреждая команду.", isCorrect: false, rationale: "Это сломает макеты сотен продуктов во всех рабочих файлах компании." },
+                    { text: "Пометить старый компонент как `[Deprecated]` (устаревший), создать рядом новый (v2), дать переходный период команде для миграции и только потом задепрекейтить окончательно.", isCorrect: true, rationale: "Безопасное управление версионностью компонентов гарантирует стабильность работы всей продуктовой команды." },
+                    { text: "Запретить разработчикам обновлять код.", isCorrect: false, rationale: "Не решение проблемы." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в процессах версионирования и поддержке библиотек." }
+                ]
+            },
+            {
+                category: "Figma Variables",
+                question: "В чем ключевое различие между Figma Styles (Стилями) и Figma Variables (Переменными)?",
+                options: [
+                    { text: "Стили доступны всем, а Переменные — только администраторам.", isCorrect: false, rationale: "Права доступа одинаковы." },
+                    { text: "Variables подлежат режимам (Modes — например, Light/Dark, Mobile/Desktop, RU/EN) и поддерживают математические связи и свойства (Color, Number, String, Boolean), тогда как Styles хранят зафиксированные составные эффекты (градиенты, комплексные тени).", isCorrect: true, rationale: "Переменные внедрили логическую структуру режимов для моментального переключения тем и плотностей." },
+                    { text: "Variables подходят только для шрифтов.", isCorrect: false, rationale: "Переменные работают с цветами, числами, строками и булевыми значениями." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в современном инструментарии Figma Variables." }
+                ]
+            },
+            {
+                category: "Именование компонентов",
+                question: "Какое именование компонентов и слоев в Figma является правильным стандартом для чистой структуры файла?",
+                options: [
+                    { text: "Button 1, Button final, Button New 2", isCorrect: false, rationale: "Создает хаос и делает поиск невозможным." },
+                    { text: "Использование структуры слэшей или точечной нотации (например, `Building Blocks/Button/Primary` или `component.button.primary`), совпадающей с именованием компонентов в React/Vue.", isCorrect: true, rationale: "Следование соглашениям об именовании (Naming Conventions) связывает дизайн с кодом без путаницы." },
+                    { text: "Именование всех элементов заглавными буквами на русском языке.", isCorrect: false, rationale: "В коде используются латинские термины." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в стандартизации гигиены макета." }
+                ]
+            },
+            {
+                category: "Документация компонентов",
+                question: "Что ОБОЗАТЕЛЬНО должно входить в документацию системного компонента (в Figma/Zeroheight/Storybook) для разработчиков?",
+                options: [
+                    { text: "Биография дизайнера, нарисовавшего этот компонент.", isCorrect: false, rationale: "Не имеет практической ценности." },
+                    { text: "Анатомия элемента, состояния (Default, Hover, Active, Focus, Disabled, Error), отступы (Padding), правила переполнения контента (Overflow) и используемые дизайн-токены.", isCorrect: true, rationale: "Без описания состояний и токенов верстальщик будет додумывать поведение на свое усмотрение." },
+                    { text: "Ссылка на видеоурок на YouTube.", isCorrect: false, rationale: "Спецификация должна быть короткой и сухой." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в передаче компонентов в разработку (Handoff)." }
+                ]
+            },
+            {
+                category: "Интеграция с кодом",
+                question: "Что такое Storybook в экосистеме разработки и как он связан с дизайн-системой?",
+                options: [
+                    { text: "Сайт с детскими сказками.", isCorrect: false, rationale: "Не относится к IT." },
+                    { text: "Инструмент для тестирования и изолированной разработки UI-компонентов в коде, служащий витриной живой дизайн-системы для фронтендеров.", isCorrect: true, rationale: "Storybook является зеркалом библиотеки компонентов из Figma, только в реальном коде (JS/TS)." },
+                    { text: "Плагин для автоматического рисования иконок.", isCorrect: false, rationale: "Не является плагином Figma." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в знании фронтенд-инструментария взаимодействия с дизайн-системой." }
+                ]
+            },
+            {
+                category: "Иконки и вектор",
+                question: "Какое главное правило подготовки вектора иконок перед добавлением их в системный сет компонентов в Figma?",
+                options: [
+                    { text: "Оставлять все обводки незамкнутыми (Stroke) и не переводить в контур.", isCorrect: false, rationale: "При масштабировании непереведенная обводка поплывет по толщине." },
+                    { text: "Переводить все Strokes в Outlines (`Flatten` / `Outline Stroke`), делать Union векторных слоев, задавать ровный Bounding Box (например, 24x24px) и настраивать Color Token поверх вектора.", isCorrect: true, rationale: "Гарантирует, что иконка не исказится при ресайзе и легко перекрасится через Instance Swap." },
+                    { text: "Сохранять иконки только в формате JPG.", isCorrect: false, rationale: "JPG — растровый формат без прозрачности." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в технической подготовке векторных сетов." }
+                ]
+            },
+            {
+                category: "Темы и темный режим",
+                question: "Почему НЕЛЬЗЯ просто инвертировать все цвета при создании темной темы (Dark Mode) из светлой (например, превратить #FFFFFF в #000000)?",
+                options: [
+                    { text: "Потому что черный цвет запрещен стандартами Google.", isCorrect: false, rationale: "Запрета нет, но чистый черный (#000000) вызывает сильный контрастный «гало-эффект» (Halo Effect) на OLED экранах." },
+                    { text: "Прямая инверсия рушит глубину тенью и слоями (Elevation/Z-index): в светлой теме верхний слой отбрасывает тень на нижний, а в темной теме высветление тона слоя показывает его близость к источнику света.", isCorrect: true, rationale: "В темных темах объём передается не тенью, а более светлым оттенком серого (Surface Elevation)." },
+                    { text: "Потому что в темных темах нельзя использовать шрифты без засечек.", isCorrect: false, rationale: "Шрифты не зависят от темы." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в физике и правилах проектирования Dark Mode." }
+                ]
+            },
+            {
+                category: "Организация Figma",
+                question: "Что такое 'Design System Governance' (Управление и процессы дизайн-системы)?",
+                options: [
+                    { text: "Назначение директора по дизайну.", isCorrect: false, rationale: "Это административная должность." },
+                    { text: "Регламентированный процесс того, как новые компоненты предлагаются дизайнерами продуктов, проходят ревью, разрабатываются, тестируются, документируются и попадают в релиз.", isCorrect: true, rationale: "Без гавернанса дизайн-система быстро превращается в свалку или перестает обновляться." },
+                    { text: "Удаление старых файлов из корзины Figma.", isCorrect: false, rationale: "Обычная гигиена аккаунта." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в организационных процессах обслуживания систем." }
+                ]
+            },
+            {
+                category: "Figma Auto Layout",
+                question: "Что делает функция Absolute Positioning (Абсолютное позиционирование) внутри родительского фрейма с Auto Layout?",
+                options: [
+                    { text: "Удаляет элемент из файла.", isCorrect: false, rationale: "Элемент остается в иерархии." },
+                    { text: "Исключает конкретный слой из общего потока выравнивания Auto Layout, позволяя закрепить его в любой точке родителя (например, индикатор-бейдж поверх иконки в углу).", isCorrect: true, rationale: "Позволяет делать плавающие бейджи уведомлений без создания лишних оберток." },
+                    { text: "Автоматически превращает вектор в растр.", isCorrect: false, rationale: "Не меняет тип слоя." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в продвинутых фичах верстки в Figma." }
+                ]
+            },
+            {
+                category: "Доступность в системах",
+                question: "Как в дизайн-системе заложить поддержку доступности для людей с ограниченными возможностями (a11y) на базовом уровне?",
+                options: [
+                    { text: "Сделать все кнопки квадратными.", isCorrect: false, rationale: "Форма кнопок не решает вопросы accessible-стандартов." },
+                    { text: "Зафиксировать токены с гарантированным контрастом текста по WCAG AA (>= 4.5:1), заложить системное состояние Focus Ring для клавиатурной навигации и контрастные цвета ошибок.", isCorrect: true, rationale: "Системная поддержка a11y в токенах автоматически делает все продукты компании доступными по умолчанию." },
+                    { text: "Добавить на сайт озвучку голосом робота.", isCorrect: false, rationale: "Экранные дикторы (Screen Readers) сами читают разметку кода, если заложены корректные параметры." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в интеграции a11y в системный слой." }
+                ]
+            },
+            {
+                category: "Компоненты ввода",
+                question: "Какая обязательная структура состояний должна быть проработана у системного компонента 'Input' (Поле ввода)?",
+                options: [
+                    { text: "Только Default и Hover.", isCorrect: false, rationale: "Недостаточно для реальной работы формы." },
+                    { text: "Default, Hover, Focus/Active, Filled, Disabled, Read-only, Error, Success и состояние с Helper Text.", isCorrect: true, rationale: "Полный набор состояний обеспечивает обработку любых пользовательских сценариев в формах." },
+                    { text: "Только состояние с ошибкой.", isCorrect: false, rationale: "Нельзя спроектировать форму только из ошибок." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании базовых форм и атомов." }
+                ]
+            },
+            {
+                category: "Сетки и токены",
+                question: "Что такое 8-пиксельная сетка (8pt Grid System) и почему именно число 8 чаще всего лежит в основе токенов отступов (Spacing Tokens)?",
+                options: [
+                    { text: "Это счастливое число в Китае.", isCorrect: false, rationale: "Не имеет отношения к инженерным причинам." },
+                    { text: "Число 8 идеально делится на 2 и 4, отлично масштабируется под большинство плотностей экранов устройств (1x, 2x, 3x) без дробных пикселей (0.5px), предотвращая размытие рендеринга.", isCorrect: true, rationale: "8pt сетка обеспечивает четкий рендеринг пикселей на всех экранах смартфонов и мониторов." },
+                    { text: "8 пикселей — это максимальная ширина курсора мыши.", isCorrect: false, rationale: "Не относится к курсору." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в стандартах пространственных сеток (Spacing Scale)." }
+                ]
+            },
+            {
+                category: "Версионирование",
+                question: "Что такое Semantic Versioning (SemVer) в контексте релизов библиотек дизайн-системы (например, версия `2.4.1`)?",
+                options: [
+                    { text: "Это случайные цифры, выбранные дизайнером.", isCorrect: false, rationale: "SemVer — строгий международный инженерный стандарт." },
+                    { text: "Формат `MAJOR.MINOR.PATCH`: MAJOR — ломающие изменения (Breaking Changes), MINOR — новые компоненты без поломок, PATCH — мелкие багфиксы и правки токенов.", isCorrect: true, rationale: "Позволяет разработчикам безопасно обновлять пакеты дизайн-системы в коде." },
+                    { text: "Год, месяц и день релиза.", isCorrect: false, rationale: "Не отражает характер изменений." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в инженерном версионировании системных библиотек." }
+                ]
+            },
+            {
+                category: "Скалирование продуктов",
+                question: "Компания запускает 3 новых суббренда с разным стилем (разные шрифты, скругления и цвета). Как должна поступить команда дизайн-системы?",
+                options: [
+                    { text: "Создать 3 абсолютно разные дизайн-системы с нуля с разным кодом.", isCorrect: false, rationale: "Утроит расходы на разработку и поддержку." },
+                    { text: "Использовать единую архитектуру компонентов в коде и Figma, заменив только слой Brand/Theme Tokens (мультибрендовость через переменные).", isCorrect: true, rationale: "Логика и каркас компонентов остаются общими, а визуальный характер (кожа бренда) меняется подменой токенов." },
+                    { text: "Заставить все суббренды выглядеть одинаково вопреки маркетингу.", isCorrect: false, rationale: "Игнорирует бизнес-цели брендинга." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в проектировании мультибрендовых архитектур (Multi-brand Systems)." }
+                ]
+            },
+            {
+                category: "Figma Variables",
+                question: "Как связать токен отступа (Spacing Token) с компонентом в Figma с помощью Переменных?",
+                options: [
+                    { text: "Написать число текстом в названии слоя.", isCorrect: false, rationale: "Текст не привязывает математическое свойство." },
+                    { text: "Создать Number Variable (например, `spacing-md = 16`), и привязать его к полю Padding или Gap в панели Auto Layout.", isCorrect: true, rationale: "При изменении переменной отступа он автоматически обновится во всех компонентах макета." },
+                    { text: "Отступы нельзя привязывать к переменным.", isCorrect: false, rationale: "Figma поддерживают числовые переменные для отступов и скруглений." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в практической работе с Spacing Variables." }
+                ]
+            },
+            {
+                category: "Микро-анимация",
+                question: "Как в дизайн-системной библиотеке передавать параметры анимаций (Design Motion Tokens)?",
+                options: [
+                    { text: "Отправлять гифки в Telegram.", isCorrect: false, rationale: "Не передает точные технические параметры." },
+                    { text: "Фиксировать токены длительности (Duration, например `200ms`) и токенов сглаживания (Easing, например `cubic-bezier(0.4, 0, 0.2, 1)`).", isCorrect: true, rationale: "Токены анимации делают переходы интерфейса плавными и едиными во всех приложениях бренда." },
+                    { text: "Анимации верстаются разработчиками на глаз.", isCorrect: false, rationale: "Приведет к хаосу и разной скорости анимирования." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в системной работе с Motion Design." }
+                ]
+            },
+            {
+                category: "Решение конфликтов",
+                question: "Продуктовый дизайнер просит добавить новый редкий вид кнопки специально под свой 1 экран. Какое верное системное решение?",
+                options: [
+                    { text: "Сразу добавить кнопку в общую дизайн-систему для всех.", isCorrect: false, rationale: "Перегрузит общую библиотеку специфическим мусором." },
+                    { text: "Предложить сделать это как локальный компонент продукта (Product-specific component); если он доказал свою эффективность на тестах и потребуется еще 2 командам — перенести в общую систему.", isCorrect: true, rationale: "Защищает главную библиотеку от замусоривания уникальными одноразовыми элементами." },
+                    { text: "Запретить дизайнеру верстать этот экран.", isCorrect: false, rationale: "Разрушает развитие продукта." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в сепарации системных и локальных компонентов." }
+                ]
+            },
+            {
+                category: "Шрифтовые системы",
+                question: "Что такое Type Scale (Типографическая шкала) в дизайн-системе?",
+                options: [
+                    { text: "Весы для взвешивания букв.", isCorrect: false, rationale: "Не относится к терминологии." },
+                    { text: "Пропорциональный математический ряд размеров шрифтов (например, с коэффициентом 1.25 — Major Third: 12, 15, 19, 24, 30, 38, 48), обеспечивающий гармоничную визуальную иерархию.", isCorrect: true, rationale: "Математический шаг шрифтов исключает случайные размеры вроде 13.5px или 23px." },
+                    { text: "Список всех установленных шрифтов на компьютере.", isCorrect: false, rationale: "Обычный системный список." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в построении пропорциональных типографических шкал." }
+                ]
+            },
+            {
+                category: "Аудит системы",
+                question: "Что такое 'Design Debt' (Дизайн-долг) и как с ним помогает бороться дизайн-система?",
+                options: [
+                    { text: "Кредит, взятый на покупку подписки Figma.", isCorrect: false, rationale: "Не связано с финансами." },
+                    { text: "Накопленные со временем несистемные решения, разрозненные стили, устаревшие компоненты и кастомные хаки в макетах, которые замедляют разработку и портят UX.", isCorrect: true, rationale: "Дизайн-система регулярно гасит дизайн-долг за счет унификации и рефакторинга компонентов." },
+                    { text: "Опоздание с реализацией задачи на 2 дня.", isCorrect: false, rationale: "Это нарушение дедлайна." },
+                    { text: "Не знаю / Затрудняюсь ответить", isCorrect: false, isUnknown: true, rationale: "Пробел в управлении техническим и дизайн-долгом в продукте." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswersLog = [];
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const categoryBadge = document.getElementById('category-badge');
+        const questionText = document.getElementById('question-text');
+        const imageContainer = document.getElementById('image-container');
+        const questionImage = document.getElementById('question-image');
+        const imageCaption = document.getElementById('image-caption');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            userAnswersLog = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            explanationBox.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const currentQ = questions[currentQuestionIndex];
+            progressIndicator.textContent = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+            categoryBadge.textContent = currentQ.category;
+            questionText.textContent = currentQ.question;
+
+            if (currentQ.image) {
+                imageContainer.classList.remove('hidden');
+                questionImage.src = currentQ.image;
+                imageCaption.textContent = currentQ.imageCaption || "";
+            } else {
+                imageContainer.classList.add('hidden');
+            }
+
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                
+                if (option.isUnknown) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-dashed border-slate-600 bg-slate-900/40 hover:bg-slate-800 hover:border-slate-500 transition duration-200 text-slate-400 font-normal cursor-pointer flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-800/60 hover:bg-slate-800 hover:border-indigo-500 transition duration-200 text-slate-200 font-normal cursor-pointer flex items-center justify-between";
+                }
+
+                btn.innerHTML = `<span>${option.text}</span>`;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const selectedOption = currentQ.options[selectedIndex];
+            const optionButtons = optionsContainer.children;
+
+            currentQ.options.forEach((opt, idx) => {
+                const btn = optionButtons[idx];
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-800', 'hover:border-indigo-500', 'bg-slate-800/60');
+                
+                if (opt.isCorrect) {
+                    btn.classList.add('bg-emerald-950/60', 'border-emerald-500', 'text-emerald-200');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('bg-rose-950/60', 'border-rose-500', 'text-rose-200');
+                } else {
+                    btn.classList.add('opacity-40', 'border-slate-900');
+                }
+            });
+
+            if (selectedOption.isCorrect) {
+                score++;
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-emerald-950/40 border-emerald-500/40 text-emerald-200 leading-relaxed";
+                explanationText.textContent = "Верно! " + selectedOption.rationale;
+            } else {
+                userAnswersLog.push({
+                    question: currentQ.question,
+                    category: currentQ.category,
+                    isUnknown: selectedOption.isUnknown || false,
+                    rationale: currentQ.options.find(o => o.isCorrect).rationale
+                });
+
+                explanationBox.className = "p-4 rounded-xl mb-6 text-sm border bg-rose-950/40 border-rose-500/40 text-rose-200 leading-relaxed";
+                if (selectedOption.isUnknown) {
+                    explanationText.textContent = "Фиксируем пробел для изучения. " + currentQ.options.find(o => o.isCorrect).rationale;
+                } else {
+                    explanationText.textContent = "Не совсем так. " + currentQ.options.find(o => o.isCorrect).rationale;
+                }
+            }
+
+            explanationBox.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Посмотреть результаты трека";
+            } else {
+                nextBtn.textContent = "Следующий вопрос";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            document.getElementById('score-circle').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const descEl = document.getElementById('result-description');
+            const gapsContainer = document.getElementById('gaps-container');
+
+            if (score >= 22) {
+                titleEl.textContent = "Экспертный уровень системного дизайна! 🏆";
+                descEl.textContent = "Вы полностью закрыли пробел по темам Design Systems, токенам и архитектуре Figma.";
+            } else if (score >= 15) {
+                titleEl.textContent = "Хороший результат! 👍";
+                descEl.textContent = "База сильная, но проявились конкретные тонкости по токенам и версионированию.";
+            } else {
+                titleEl.textContent = "Зона роста по дизайн-системам подтвердилась 📚";
+                descEl.textContent = "Вам необходимо подтянуть архитектуру токенов, процессы взаимодействия с разработкой и системный инструментарий Figma.";
+            }
+
+            gapsContainer.innerHTML = '';
+
+            if (userAnswersLog.length === 0) {
+                gapsContainer.innerHTML = `<div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 text-sm">Все 25 вопросов отвечены идеально!</div>`;
+            } else {
+                userAnswersLog.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm space-y-1";
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-indigo-400 font-semibold uppercase text-[10px] tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">${item.category}</span>
+                            <span class="${item.isUnknown ? 'text-amber-400' : 'text-rose-400'} font-medium text-[11px]">${item.isUnknown ? 'Затрудняюсь ответить' : 'Ошибка в ответе'}</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">${item.question}</p>
+                        <p class="text-slate-400 italic">${item.rationale}</p>
+                    `;
+                    gapsContainer.appendChild(div);
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
